@@ -4,17 +4,20 @@ import javax.vecmath.Vector2d;
 
 public class Emitter implements Position {
 
-  private Vector2d position;
+  private Vector2d position = new Vector2d();
   /**
    * Number of particles emitted per second.
    */
-  private long rate;
+  private long rate = 1;
   /**
-   * How many seconds do particles survive.
+   * How many milliseconds do particles survive.
    */
-  private long lifetime;
-  private Vector2d initialSpeed;
+  private long lifetime = 1000;
+  private Vector2d initialSpeed = new Vector2d();
+  private double particleWeight = 1;
+  private double particleSize = 1;
 
+  @Override
   public Vector2d getPosition() {
     return position;
   }
@@ -45,5 +48,21 @@ public class Emitter implements Position {
 
   public void setInitialSpeed(Vector2d initialSpeed) {
     this.initialSpeed = initialSpeed;
+  }
+
+  public double getParticleWeight() {
+    return particleWeight;
+  }
+
+  public void setParticleWeight(double particleWeight) {
+    this.particleWeight = particleWeight;
+  }
+
+  public double getParticleSize() {
+    return particleSize;
+  }
+
+  public void setParticleSize(double particleSize) {
+    this.particleSize = particleSize;
   }
 }

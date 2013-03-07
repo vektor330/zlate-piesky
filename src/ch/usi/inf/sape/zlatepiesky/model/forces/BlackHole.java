@@ -1,5 +1,8 @@
-package ch.usi.inf.sape.zlatepiesky.model;
+package ch.usi.inf.sape.zlatepiesky.model.forces;
 
+import ch.usi.inf.sape.zlatepiesky.model.Force;
+import ch.usi.inf.sape.zlatepiesky.model.Particle;
+import ch.usi.inf.sape.zlatepiesky.model.Position;
 import javax.vecmath.Vector2d;
 
 public class BlackHole implements Force, Position {

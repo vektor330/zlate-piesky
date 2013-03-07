@@ -4,15 +4,15 @@ import javax.vecmath.Vector2d;
 
 public class Particle implements Position {
 
-  private Vector2d position;
-  private Vector2d speed;
-  private double weight;
+  private Vector2d position = new Vector2d();
+  private Vector2d speed = new Vector2d();
+  private double weight = 1;
   /**
    * Timestamp when this particle was created.
    */
-  private long created;
-  private double size;
-  private Emitter birthplace;
+  private long created = 0;
+  private double size = 1;
+  private Emitter birthplace = null;
 
   @Override
   public Vector2d getPosition() {

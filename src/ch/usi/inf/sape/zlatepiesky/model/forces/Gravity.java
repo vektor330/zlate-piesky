@@ -1,20 +1,15 @@
-package ch.usi.inf.sape.zlatepiesky.model;
+package ch.usi.inf.sape.zlatepiesky.model.forces;
 
+import ch.usi.inf.sape.zlatepiesky.model.Force;
+import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import javax.vecmath.Vector2d;
 
-public class Wind implements Force, Position {
+public class Gravity implements Force {
 
-  private Vector2d position;
   private Vector2d direction;
   private double strength;
 
-  @Override
-  public Vector2d getPosition() {
-    return position;
-  }
-
-  public void setPosition(Vector2d position) {
-    this.position = position;
+  public Gravity() {
   }
 
   public Vector2d getDirection() {
@@ -36,11 +31,9 @@ public class Wind implements Force, Position {
 
   @Override
   public Vector2d getEffect(Particle particle) {
-    final Vector2d ret = new Vector2d(particle.getPosition());
-    ret.sub(position);
-    final double distanceSq = ret.lengthSquared();
+    final Vector2d ret = new Vector2d(direction);
     ret.normalize();
-    ret.scale(strength * particle.getSize() / distanceSq);
+    ret.scale(particle.getWeight());
     return ret;
   }
 }
