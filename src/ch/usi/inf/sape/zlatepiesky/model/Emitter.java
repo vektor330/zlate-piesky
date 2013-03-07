@@ -12,10 +12,15 @@ public class Emitter implements Position {
   /**
    * How many milliseconds do particles survive.
    */
-  private long lifetime = 1000;
-  private Vector2d initialSpeed = new Vector2d();
+  private long lifetime = 10000;
+  private Vector2d initialSpeed = new Vector2d(1, 1);
   private double particleWeight = 1;
   private double particleSize = 1;
+  /**
+   * Spread in radians.
+   */
+  private double angleSpread = 0;
+  private double speedSpread = 1;
 
   @Override
   public Vector2d getPosition() {
@@ -23,7 +28,7 @@ public class Emitter implements Position {
   }
 
   public void setPosition(Vector2d position) {
-    this.position = position;
+    this.position = new Vector2d(position);
   }
 
   public long getRate() {
@@ -47,7 +52,7 @@ public class Emitter implements Position {
   }
 
   public void setInitialSpeed(Vector2d initialSpeed) {
-    this.initialSpeed = initialSpeed;
+    this.initialSpeed = new Vector2d(initialSpeed);
   }
 
   public double getParticleWeight() {
@@ -64,5 +69,21 @@ public class Emitter implements Position {
 
   public void setParticleSize(double particleSize) {
     this.particleSize = particleSize;
+  }
+
+  public double getAngleSpread() {
+    return angleSpread;
+  }
+
+  public void setAngleSpread(double angleSpread) {
+    this.angleSpread = angleSpread;
+  }
+
+  public double getSpeedSpread() {
+    return speedSpread;
+  }
+
+  public void setSpeedSpread(double speedSpread) {
+    this.speedSpread = speedSpread;
   }
 }

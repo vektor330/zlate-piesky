@@ -20,7 +20,7 @@ public class Particle implements Position {
   }
 
   public void setPosition(Vector2d position) {
-    this.position = position;
+    this.position = new Vector2d(position);
   }
 
   public Vector2d getSpeed() {
@@ -28,7 +28,7 @@ public class Particle implements Position {
   }
 
   public void setSpeed(Vector2d speed) {
-    this.speed = speed;
+    this.speed = new Vector2d(speed);
   }
 
   public double getWeight() {

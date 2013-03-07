@@ -1,20 +1,26 @@
 package ch.usi.inf.sape.zlatepiesky.gui;
 
+import ch.usi.inf.sape.zlatepiesky.World;
+import ch.usi.inf.sape.zlatepiesky.model.Emitter;
+import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
+import ch.usi.inf.sape.zlatepiesky.model.forces.Gravity;
 import java.awt.EventQueue;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
 import java.math.RoundingMode;
 import java.text.DecimalFormat;
+import java.util.Timer;
+import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
+import javax.vecmath.Vector2d;
 
 public class MainWindow extends JFrame {
 
   private static final long serialVersionUID = 13243235L;
-
   private static final Logger LOG = Logger.getLogger("Viewport");
   private static final DecimalFormat DF = (DecimalFormat) DecimalFormat.getInstance();
 
@@ -24,10 +30,43 @@ public class MainWindow extends JFrame {
   }
   private AffineTransform originalTransform;
   private Point2D mouseOrigin;
+  private final World world = new World();
 
   public MainWindow() {
     initComponents();
     setLocationRelativeTo(null);
+    world.setSimulationStep(10);
+    final Emitter e = new Emitter();
+    e.setPosition(new Vector2d(10, 10));
+    e.setInitialSpeed(new Vector2d(1.5, -1.5));
+    e.setRate(100);
+    e.setParticleSize(3);
+    world.getEmitters().add(e);
+    viewport.setWorld(world);
+
+    final BlackHole bh1 = new BlackHole();
+    bh1.setStrength(500);
+    bh1.setPosition(new Vector2d(0, 100));
+    world.getForces().add(bh1);
+
+    final BlackHole bh2 = new BlackHole();
+    bh2.setStrength(400);
+    bh2.setPosition(new Vector2d(100, 100));
+    world.getForces().add(bh2);
+
+    final Gravity gr = new Gravity();
+    gr.setDirection(new Vector2d(0, 1));
+    gr.setStrength(0.001);
+    world.getForces().add(gr);
+
+    final Timer simulationTimer = new Timer();
+    simulationTimer.scheduleAtFixedRate(new TimerTask() {
+      @Override
+      public void run() {
+        world.simulationStep();
+        viewport.repaint();
+      }
+    }, 0, 10);
   }
 
   @SuppressWarnings("unchecked")

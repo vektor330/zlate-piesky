@@ -1,6 +1,7 @@
 package ch.usi.inf.sape.zlatepiesky.model.forces;
 
 import ch.usi.inf.sape.zlatepiesky.model.Force;
+import ch.usi.inf.sape.zlatepiesky.model.ForceType;
 import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import ch.usi.inf.sape.zlatepiesky.model.Position;
 import javax.vecmath.Vector2d;
@@ -45,5 +46,11 @@ public class Wind implements Force, Position {
     ret.normalize();
     ret.scale(strength * particle.getSize() / distanceSq);
     return ret;
+  }
+
+
+  @Override
+  public ForceType getType() {
+    return ForceType.WIND;
   }
 }

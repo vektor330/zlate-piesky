@@ -10,4 +10,6 @@ public interface Force {
    * Returns the acceleration this force exerts to the particle.
    */
   Vector2d getEffect(Particle particle);
+
+  ForceType getType();
 }

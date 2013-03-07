@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.gui;
 
+import ch.usi.inf.sape.zlatepiesky.World;
 import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
@@ -10,8 +11,8 @@ import javax.swing.JComponent;
 public class Viewport extends JComponent {
 
   private static final long serialVersionUID = 1345623525L;
-
   private AffineTransform transform = new AffineTransform();
+  private World world;
 
   public Viewport() {
     initComponents();
@@ -23,7 +24,7 @@ public class Viewport extends JComponent {
     final Graphics2D g = (Graphics2D) gr;
     g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
     g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    g.setPaint(Color.WHITE);
+    g.setPaint(Color.BLACK);
     g.fillRect(0, 0, getWidth(), getHeight());
     final AffineTransform at = g.getTransform();
     g.transform(transform);
@@ -31,6 +32,9 @@ public class Viewport extends JComponent {
     g.drawLine(0, 0, 100, 0);
     g.setPaint(Color.BLUE);
     g.drawLine(0, 0, 0, 100);
+    if (world != null) {
+      Renderer.render(world, g);
+    }
     g.setTransform(at);
   }
 
@@ -45,5 +49,13 @@ public class Viewport extends JComponent {
 
   public AffineTransform getTransform() {
     return transform;
+  }
+
+  public World getWorld() {
+    return world;
+  }
+
+  public void setWorld(World world) {
+    this.world = world;
   }
 }
