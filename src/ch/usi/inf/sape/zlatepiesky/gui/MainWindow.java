@@ -46,11 +46,13 @@ public class MainWindow extends JFrame {
 
     final BlackHole bh1 = new BlackHole();
     bh1.setStrength(500);
+    bh1.setSchwarzschildRadius(30);
     bh1.setPosition(new Vector2d(0, 100));
     world.getForces().add(bh1);
 
     final BlackHole bh2 = new BlackHole();
     bh2.setStrength(400);
+    bh2.setSchwarzschildRadius(20);
     bh2.setPosition(new Vector2d(100, 100));
     world.getForces().add(bh2);
 

@@ -8,6 +8,7 @@ import java.awt.RenderingHints;
 import java.awt.geom.AffineTransform;
 import javax.swing.JComponent;
 
+// TODO make axes hidable
 public class Viewport extends JComponent {
 
   private static final long serialVersionUID = 1345623525L;

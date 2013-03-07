@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import java.awt.Color;
 import javax.vecmath.Vector2d;
 
 public class Particle implements Position {
@@ -13,6 +14,8 @@ public class Particle implements Position {
   private long created = 0;
   private double size = 1;
   private Emitter birthplace = null;
+  private Color color = null;
+  private boolean immovable = false;
 
   @Override
   public Vector2d getPosition() {
@@ -61,5 +64,21 @@ public class Particle implements Position {
 
   public void setBirthplace(Emitter birthplace) {
     this.birthplace = birthplace;
+  }
+
+  public Color getColor() {
+    return color;
+  }
+
+  public void setColor(final Color color) {
+    this.color = color;
+  }
+
+  public boolean isImmovable() {
+    return immovable;
+  }
+
+  public void setImmovable(boolean immovable) {
+    this.immovable = immovable;
   }
 }

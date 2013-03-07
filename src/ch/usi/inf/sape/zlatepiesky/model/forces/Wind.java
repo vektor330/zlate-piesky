@@ -11,6 +11,7 @@ public class Wind implements Force, Position {
   private Vector2d position;
   private Vector2d direction;
   private double strength;
+  // TODO add perturbation
 
   @Override
   public Vector2d getPosition() {

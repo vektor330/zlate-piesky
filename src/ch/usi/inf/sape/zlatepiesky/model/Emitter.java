@@ -12,14 +12,15 @@ public class Emitter implements Position {
   /**
    * How many milliseconds do particles survive.
    */
-  private long lifetime = 10000;
+  private long lifetime = 100000;
   private Vector2d initialSpeed = new Vector2d(1, 1);
   private double particleWeight = 1;
   private double particleSize = 1;
+  // TODO add weight, size and lifetime perturbation
   /**
    * Spread in radians.
    */
-  private double angleSpread = 0;
+  private double angleSpread = 0; // TODO implement
   private double speedSpread = 1;
 
   @Override
