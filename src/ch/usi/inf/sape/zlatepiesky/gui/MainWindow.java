@@ -33,6 +33,7 @@ public class MainWindow extends JFrame {
     initComponents();
     setLocationRelativeTo(null);
     world.setSimulationStep(10);
+    world.setAirResistance(0.0001);
     Setup.setup(world);
     viewport.setWorld(world);
 

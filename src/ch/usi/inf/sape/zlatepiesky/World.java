@@ -15,7 +15,6 @@ import java.util.List;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4d;
 
-// TODO add air resistance
 public class World {
 
   private List<Force> forces = new LinkedList<>();
@@ -26,6 +25,7 @@ public class World {
    * Simulation step in milliseconds.
    */
   private long simulationStep;
+  private double airResistance = 0;
   private double EPSILON = 0.00001;
 
   public synchronized void simulationStep() {
@@ -107,6 +107,10 @@ public class World {
         sum.add(effect);
       }
       particle.getSpeed().add(sum);
+      // air resistance
+      final double speedSq = particle.getSpeed().lengthSquared();
+      particle.getSpeed().scale(1 - speedSq * getAirResistance() * particle.getSize());
+
       final Vector2d newPosition = new Vector2d(particle.getPosition());
       newPosition.add(particle.getSpeed());
       boolean wasCollision = false;
@@ -159,5 +163,13 @@ public class World {
 
   public void setWalls(List<Wall> walls) {
     this.walls = walls;
+  }
+
+  public double getAirResistance() {
+    return airResistance;
+  }
+
+  public void setAirResistance(double airResistance) {
+    this.airResistance = airResistance;
   }
 }
