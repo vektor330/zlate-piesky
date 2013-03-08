@@ -1,9 +1,9 @@
 package ch.usi.inf.sape.zlatepiesky.model.forces;
 
-import ch.usi.inf.sape.zlatepiesky.model.Force;
-import ch.usi.inf.sape.zlatepiesky.model.ForceType;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.ForceType;
 import ch.usi.inf.sape.zlatepiesky.model.Particle;
-import ch.usi.inf.sape.zlatepiesky.model.Position;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
 import javax.vecmath.Vector2d;
 
 public class Wind implements Force, Position {

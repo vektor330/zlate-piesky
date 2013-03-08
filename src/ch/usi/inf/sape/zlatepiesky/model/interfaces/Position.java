@@ -1,4 +1,4 @@
-package ch.usi.inf.sape.zlatepiesky.model;
+package ch.usi.inf.sape.zlatepiesky.model.interfaces;
 
 import javax.vecmath.Vector2d;
 

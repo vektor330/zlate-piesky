@@ -1,10 +1,12 @@
 package ch.usi.inf.sape.zlatepiesky;
 
 import ch.usi.inf.sape.zlatepiesky.model.Emitter;
-import ch.usi.inf.sape.zlatepiesky.model.Force;
-import ch.usi.inf.sape.zlatepiesky.model.ForceType;
 import ch.usi.inf.sape.zlatepiesky.model.Particle;
+import ch.usi.inf.sape.zlatepiesky.model.Wall;
 import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.ForceType;
+import ch.usi.inf.sape.zlatepiesky.physics.Intersection;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.LinkedList;
@@ -12,12 +14,12 @@ import java.util.List;
 import javax.vecmath.Vector2d;
 
 // TODO add air resistance
-// TODO add wall collisions
 public class World {
 
   private List<Force> forces = new LinkedList<>();
   private List<Emitter> emitters = new LinkedList<>();
   private List<Particle> particles = new LinkedList<>();
+  private List<Wall> walls = new LinkedList<>();
   /**
    * Simulation step in milliseconds.
    */
@@ -27,7 +29,12 @@ public class World {
   public synchronized void simulationStep() {
     final long stepsPerSecond = 1000 / getSimulationStep();
     final long now = System.currentTimeMillis();
-    // kill old particles
+    killOldParticles(now);
+    createParticles(stepsPerSecond, now);
+    moveParticles(now);
+  }
+
+  private void killOldParticles(final long now) {
     final Iterator<Particle> it = getParticles().iterator();
     while (it.hasNext()) {
       final Particle particle = it.next();
@@ -35,7 +42,9 @@ public class World {
         it.remove();
       }
     }
-    // create new particles
+  }
+
+  private void createParticles(final long stepsPerSecond, final long now) {
     for (final Emitter emitter : getEmitters()) {
       final double create = (double) emitter.getRate() / (double) stepsPerSecond;
       int atLeast = 0;
@@ -62,7 +71,9 @@ public class World {
         particles.add(p);
       }
     }
-    // apply all forces & move all particles
+  }
+
+  private void moveParticles(final long now) {
     final Iterator<Particle> it2 = particles.iterator();
     final List<Particle> blinks = new LinkedList<>();
     while (it2.hasNext()) {
@@ -71,7 +82,7 @@ public class World {
         continue;
       }
       final Vector2d sum = new Vector2d();
-      for (final Force force : getForces()) {
+      for (final Force force : forces) {
         if (force.getType() == ForceType.BLACK_HOLE) {
           final BlackHole blackHole = (BlackHole) force;
           final Vector2d distance = new Vector2d(blackHole.getPosition());
@@ -94,9 +105,30 @@ public class World {
         sum.add(effect);
       }
       particle.getSpeed().add(sum);
-      particle.getPosition().add(particle.getSpeed());
+      final Vector2d newPosition = new Vector2d(particle.getPosition());
+      newPosition.add(particle.getSpeed());
+      boolean wasCollision = false;
+      for (final Wall wall : getWalls()) {
+        if (particleCollides(particle.getPosition(), newPosition, wall)) {
+          //final Vector2d collisionPoint = null;
+          //final Vector2d normal = wall.getNormal();
+          //final Vector2d newSpeed = null;
+          particle.getSpeed().negate();
+          particle.getPosition().add(particle.getSpeed());
+          wasCollision = true;
+          break;
+        }
+      }
+      if (!wasCollision) {
+        particle.setPosition(newPosition);
+      }
     }
     particles.addAll(blinks);
+  }
+
+  private boolean particleCollides(Vector2d position, Vector2d newPosition, Wall wall) {
+    return Intersection.linesIntersect(position.x, position.y, newPosition.x, newPosition.y,
+            wall.getBegin().x, wall.getBegin().y, wall.getEnd().x, wall.getEnd().y);
   }
 
   public List<Force> getForces() {
@@ -117,5 +149,13 @@ public class World {
 
   public void setSimulationStep(long simulationStep) {
     this.simulationStep = simulationStep;
+  }
+
+  public List<Wall> getWalls() {
+    return walls;
+  }
+
+  public void setWalls(List<Wall> walls) {
+    this.walls = walls;
   }
 }

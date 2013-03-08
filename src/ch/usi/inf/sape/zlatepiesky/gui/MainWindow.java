@@ -1,9 +1,7 @@
 package ch.usi.inf.sape.zlatepiesky.gui;
 
+import ch.usi.inf.sape.zlatepiesky.Setup;
 import ch.usi.inf.sape.zlatepiesky.World;
-import ch.usi.inf.sape.zlatepiesky.model.Emitter;
-import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
-import ch.usi.inf.sape.zlatepiesky.model.forces.Gravity;
 import java.awt.EventQueue;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -16,7 +14,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
-import javax.vecmath.Vector2d;
 
 public class MainWindow extends JFrame {
 
@@ -36,39 +33,23 @@ public class MainWindow extends JFrame {
     initComponents();
     setLocationRelativeTo(null);
     world.setSimulationStep(10);
-    final Emitter e = new Emitter();
-    e.setPosition(new Vector2d(10, 10));
-    e.setInitialSpeed(new Vector2d(1.5, -1.5));
-    e.setRate(100);
-    e.setParticleSize(3);
-    world.getEmitters().add(e);
+    Setup.setup(world);
     viewport.setWorld(world);
-
-    final BlackHole bh1 = new BlackHole();
-    bh1.setStrength(500);
-    bh1.setSchwarzschildRadius(30);
-    bh1.setPosition(new Vector2d(0, 100));
-    world.getForces().add(bh1);
-
-    final BlackHole bh2 = new BlackHole();
-    bh2.setStrength(400);
-    bh2.setSchwarzschildRadius(20);
-    bh2.setPosition(new Vector2d(100, 100));
-    world.getForces().add(bh2);
-
-    final Gravity gr = new Gravity();
-    gr.setDirection(new Vector2d(0, 1));
-    gr.setStrength(0.001);
-    world.getForces().add(gr);
 
     final Timer simulationTimer = new Timer();
     simulationTimer.scheduleAtFixedRate(new TimerTask() {
+      private int counter = 0;
+
       @Override
       public void run() {
         world.simulationStep();
-        viewport.repaint();
+        counter++;
+        if (counter == 5) {
+          viewport.repaint();
+          counter = 0;
+        }
       }
-    }, 0, 10);
+    }, 0, 5);
   }
 
   @SuppressWarnings("unchecked")
@@ -76,54 +57,11 @@ public class MainWindow extends JFrame {
   private void initComponents() {
     java.awt.GridBagConstraints gridBagConstraints;
 
-    jLabel1 = new javax.swing.JLabel();
-    translation = new javax.swing.JTextField();
-    jLabel2 = new javax.swing.JLabel();
-    zoom = new javax.swing.JTextField();
     viewport = new ch.usi.inf.sape.zlatepiesky.gui.Viewport();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setPreferredSize(new java.awt.Dimension(800, 600));
     getContentPane().setLayout(new java.awt.GridBagLayout());
-
-    jLabel1.setText("Translation:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints.insets = new java.awt.Insets(12, 6, 0, 0);
-    getContentPane().add(jLabel1, gridBagConstraints);
-
-    translation.setEditable(false);
-    translation.setText("0, 0");
-    translation.setName(""); // NOI18N
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 1;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridheight = 2;
-    gridBagConstraints.ipadx = 186;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints.insets = new java.awt.Insets(6, 18, 6, 0);
-    getContentPane().add(translation, gridBagConstraints);
-
-    jLabel2.setText("Zoom:");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 2;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints.insets = new java.awt.Insets(12, 6, 0, 0);
-    getContentPane().add(jLabel2, gridBagConstraints);
-
-    zoom.setEditable(false);
-    zoom.setText("1");
-    gridBagConstraints = new java.awt.GridBagConstraints();
-    gridBagConstraints.gridx = 3;
-    gridBagConstraints.gridy = 1;
-    gridBagConstraints.gridheight = 2;
-    gridBagConstraints.ipadx = 186;
-    gridBagConstraints.anchor = java.awt.GridBagConstraints.NORTHWEST;
-    gridBagConstraints.insets = new java.awt.Insets(6, 18, 6, 0);
-    getContentPane().add(zoom, gridBagConstraints);
 
     viewport.addMouseWheelListener(new java.awt.event.MouseWheelListener() {
       public void mouseWheelMoved(java.awt.event.MouseWheelEvent evt) {
@@ -161,7 +99,6 @@ public class MainWindow extends JFrame {
       viewport.getTransform().scale(factor, factor);
       viewport.getTransform().translate(-mouse.getX(), -mouse.getY());
       viewport.repaint();
-      zoom.setText(DF.format(viewport.getTransform().getScaleX()));
     } catch (NoninvertibleTransformException ex) {
       Logger.getLogger(MainWindow.class.getName()).log(Level.SEVERE, null, ex);
     }
@@ -184,7 +121,6 @@ public class MainWindow extends JFrame {
       mouseOrigin = current;
       viewport.getTransform().translate(tx, ty);
       viewport.repaint();
-      translation.setText(DF.format(viewport.getTransform().getTranslateX()) + ", " + DF.format(viewport.getTransform().getTranslateY()));
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
     }
@@ -236,10 +172,6 @@ public class MainWindow extends JFrame {
     });
   }
   // Variables declaration - do not modify//GEN-BEGIN:variables
-  private javax.swing.JLabel jLabel1;
-  private javax.swing.JLabel jLabel2;
-  private javax.swing.JTextField translation;
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
-  private javax.swing.JTextField zoom;
   // End of variables declaration//GEN-END:variables
 }

@@ -1,9 +1,13 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
+import java.awt.BasicStroke;
 import java.awt.Color;
+import java.awt.Graphics2D;
 import javax.vecmath.Vector2d;
 
-public class Particle implements Position {
+public class Particle implements Position, Renderable {
 
   private Vector2d position = new Vector2d();
   private Vector2d speed = new Vector2d();
@@ -80,5 +84,23 @@ public class Particle implements Position {
 
   public void setImmovable(boolean immovable) {
     this.immovable = immovable;
+  }
+
+  @Override
+  public void render(Graphics2D g) {
+    final int x = (int) Math.round(position.x);
+    final int y = (int) Math.round(position.y);
+    final int x2 = (int) Math.round(position.x + speed.x);
+    final int y2 = (int) Math.round(position.y + speed.y);
+    final Color c;
+    if (color != null) {
+      c = color;
+    } else {
+      float blue = Math.max(0, Math.min(1, (float) Math.log(speed.lengthSquared())));
+      c = new Color(1 - blue, 0.2f, blue);
+    }
+    g.setPaint(c);
+    g.setStroke(new BasicStroke((int) Math.round(size)));
+    g.drawLine(x, y, x2, y2);
   }
 }

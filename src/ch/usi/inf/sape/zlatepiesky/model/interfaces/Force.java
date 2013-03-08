@@ -1,5 +1,6 @@
-package ch.usi.inf.sape.zlatepiesky.model;
+package ch.usi.inf.sape.zlatepiesky.model.interfaces;
 
+import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import javax.vecmath.Vector2d;
 
 public interface Force {

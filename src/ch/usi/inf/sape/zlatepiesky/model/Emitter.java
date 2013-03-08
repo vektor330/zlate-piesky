@@ -1,8 +1,12 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
+import java.awt.Color;
+import java.awt.Graphics2D;
 import javax.vecmath.Vector2d;
 
-public class Emitter implements Position {
+public class Emitter implements Position, Renderable {
 
   private Vector2d position = new Vector2d();
   /**
@@ -86,5 +90,13 @@ public class Emitter implements Position {
 
   public void setSpeedSpread(double speedSpread) {
     this.speedSpread = speedSpread;
+  }
+
+  @Override
+  public void render(Graphics2D g) {
+    final int x = (int) Math.round(position.x);
+    final int y = (int) Math.round(position.y);
+    g.setPaint(Color.BLUE);
+    g.fillRect(x - 5, y - 5, x + 5, y + 5);
   }
 }
