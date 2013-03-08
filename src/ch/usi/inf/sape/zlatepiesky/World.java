@@ -113,7 +113,7 @@ public class World {
       for (final Wall wall : getWalls()) {
         if (particleCollides(particle.getPosition(), newPosition, wall)) {
           final Vector4d mirrored = Mirror.mirror(wall.getBegin(), wall.getEnd(), particle.getPosition(), newPosition);
-          Vector2d newPosM = new Vector2d(mirrored.z, mirrored.y);
+          Vector2d newPosM = new Vector2d(mirrored.z, mirrored.w);
           particle.setPosition(newPosM);
           newPosM.sub(new Vector2d(mirrored.x, mirrored.y));
           particle.setSpeed(newPosM);

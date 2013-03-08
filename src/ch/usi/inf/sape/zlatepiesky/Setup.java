@@ -18,7 +18,7 @@ public class Setup {
 
     final BlackHole bh1 = new BlackHole();
     bh1.setStrength(500);
-    bh1.setSchwarzschildRadius(30);
+    bh1.setSchwarzschildRadius(40);
     bh1.setPosition(new Vector2d(0, 100));
     world.getForces().add(bh1);
 
