@@ -37,6 +37,11 @@ public class Setup {
     w.setBegin(new Vector2d(300, 50));
     w.setEnd(new Vector2d(350, -50));
     world.getWalls().add(w);
+
+    final Wall ground = new Wall();
+    ground.setBegin(new Vector2d(-100000, 1000));
+    ground.setEnd(new Vector2d(100000, 1000));
+    world.getWalls().add(ground);
   }
 
 }

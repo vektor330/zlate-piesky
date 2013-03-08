@@ -7,11 +7,13 @@ import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.ForceType;
 import ch.usi.inf.sape.zlatepiesky.physics.Intersection;
+import ch.usi.inf.sape.zlatepiesky.physics.Mirror;
 import java.awt.Color;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.vecmath.Vector2d;
+import javax.vecmath.Vector4d;
 
 // TODO add air resistance
 public class World {
@@ -110,11 +112,11 @@ public class World {
       boolean wasCollision = false;
       for (final Wall wall : getWalls()) {
         if (particleCollides(particle.getPosition(), newPosition, wall)) {
-          //final Vector2d collisionPoint = null;
-          //final Vector2d normal = wall.getNormal();
-          //final Vector2d newSpeed = null;
-          particle.getSpeed().negate();
-          particle.getPosition().add(particle.getSpeed());
+          final Vector4d mirrored = Mirror.mirror(wall.getBegin(), wall.getEnd(), particle.getPosition(), newPosition);
+          Vector2d newPosM = new Vector2d(mirrored.z, mirrored.y);
+          particle.setPosition(newPosM);
+          newPosM.sub(new Vector2d(mirrored.x, mirrored.y));
+          particle.setSpeed(newPosM);
           wasCollision = true;
           break;
         }
