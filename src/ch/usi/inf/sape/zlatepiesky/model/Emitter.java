@@ -1,14 +1,13 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
-import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
-import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Shape;
+import java.awt.geom.Rectangle2D;
 import javax.vecmath.Vector2d;
 
-public class Emitter implements Position, Renderable {
+public class Emitter extends PositionedItem {
 
-  private Vector2d position = new Vector2d();
   /**
    * Number of particles emitted per second.
    */
@@ -26,15 +25,6 @@ public class Emitter implements Position, Renderable {
    */
   private double angleSpread = 0; // TODO implement
   private double speedSpread = 1;
-
-  @Override
-  public Vector2d getPosition() {
-    return position;
-  }
-
-  public void setPosition(Vector2d position) {
-    this.position = new Vector2d(position);
-  }
 
   public long getRate() {
     return rate;
@@ -94,9 +84,12 @@ public class Emitter implements Position, Renderable {
 
   @Override
   public void render(Graphics2D g) {
-    final int x = (int) Math.round(position.x);
-    final int y = (int) Math.round(position.y);
     g.setPaint(Color.BLUE);
-    g.fillRect(x - 5, y - 5, x + 5, y + 5);
+    g.fill(getShape());
+  }
+
+  @Override
+  public Shape getShape() {
+    return new Rectangle2D.Double(getPosition().x - 5, getPosition().y - 5, 10, 10);
   }
 }

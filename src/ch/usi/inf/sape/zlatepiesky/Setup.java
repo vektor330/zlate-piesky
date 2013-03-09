@@ -9,6 +9,9 @@ import javax.vecmath.Vector2d;
 public class Setup {
 
   public static void setup(final World world) {
+    world.setSimulationStep(10);
+    world.setAirResistance(0.0001);
+
     final Emitter e = new Emitter();
     e.setPosition(new Vector2d(10, 10));
     e.setInitialSpeed(new Vector2d(1.5, -1.5));
@@ -28,9 +31,21 @@ public class Setup {
     bh2.setPosition(new Vector2d(100, 100));
     world.getForces().add(bh2);
 
+    final BlackHole bh3 = new BlackHole();
+    bh3.setStrength(400);
+    bh3.setSchwarzschildRadius(40);
+    bh3.setPosition(new Vector2d(1000, 0));
+    world.getForces().add(bh3);
+
+    final BlackHole bh4 = new BlackHole();
+    bh4.setStrength(500);
+    bh4.setSchwarzschildRadius(40);
+    bh4.setPosition(new Vector2d(-1000, 1000));
+    world.getForces().add(bh4);
+
     final Gravity gr = new Gravity();
     gr.setDirection(new Vector2d(0, 1));
-    gr.setStrength(0.001);
+    gr.setStrength(0.005);
     world.getForces().add(gr);
 
     final Wall w = new Wall();
@@ -43,5 +58,4 @@ public class Setup {
     ground.setEnd(new Vector2d(100000, 1000));
     world.getWalls().add(ground);
   }
-
 }

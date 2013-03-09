@@ -15,6 +15,7 @@ import java.util.logging.Logger;
 import javax.swing.JFrame;
 import javax.swing.UIManager;
 
+// TODO save/load
 public class MainWindow extends JFrame {
 
   private static final long serialVersionUID = 13243235L;
@@ -32,8 +33,6 @@ public class MainWindow extends JFrame {
   public MainWindow() {
     initComponents();
     setLocationRelativeTo(null);
-    world.setSimulationStep(10);
-    world.setAirResistance(0.0001);
     Setup.setup(world);
     viewport.setWorld(world);
 
@@ -45,7 +44,7 @@ public class MainWindow extends JFrame {
       public void run() {
         world.simulationStep();
         counter++;
-        if (counter == 5) {
+        if (counter == 2) {
           viewport.repaint();
           counter = 0;
         }
