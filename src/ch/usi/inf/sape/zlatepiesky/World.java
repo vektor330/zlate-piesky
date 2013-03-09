@@ -224,4 +224,31 @@ public class World {
       old.setSelected(false);
     }
   }
+
+  public void delete(Selectable selected) {
+    final Iterator<Force> itf = forces.iterator();
+    while (itf.hasNext()) {
+      final Force f = itf.next();
+      if (f == selected) {
+        itf.remove();
+        return;
+      }
+    }
+    final Iterator<Emitter> ite = emitters.iterator();
+    while (ite.hasNext()) {
+      final Emitter e = ite.next();
+      if (e == selected) {
+        ite.remove();
+        return;
+      }
+    }
+    final Iterator<Wall> itw = walls.iterator();
+    while (itw.hasNext()) {
+      final Wall w = itw.next();
+      if (w == selected) {
+        itw.remove();
+        return;
+      }
+    }
+  }
 }

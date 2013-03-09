@@ -6,8 +6,6 @@ import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
-import java.math.RoundingMode;
-import java.text.DecimalFormat;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
@@ -19,12 +17,6 @@ public class MainWindow extends JFrame {
 
   private static final long serialVersionUID = 13243235L;
   private static final Logger LOG = Logger.getLogger("Viewport");
-  private static final DecimalFormat DF = (DecimalFormat) DecimalFormat.getInstance();
-
-  static {
-    DF.setRoundingMode(RoundingMode.HALF_UP);
-    DF.setMaximumFractionDigits(3);
-  }
   private AffineTransform originalTransform;
   private Point2D mouseOrigin;
   private final World world = new World();
@@ -142,6 +134,7 @@ public class MainWindow extends JFrame {
       LOG.log(Level.SEVERE, null, ex);
     }
   }//GEN-LAST:event_mouseClick
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
   // End of variables declaration//GEN-END:variables

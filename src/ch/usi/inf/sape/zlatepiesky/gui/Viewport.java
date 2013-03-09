@@ -5,8 +5,12 @@ import java.awt.Color;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.RenderingHints;
+import java.awt.event.ActionEvent;
+import java.awt.event.KeyEvent;
 import java.awt.geom.AffineTransform;
+import javax.swing.AbstractAction;
 import javax.swing.JComponent;
+import javax.swing.KeyStroke;
 
 // TODO make axes hidable
 public class Viewport extends JComponent {
@@ -18,6 +22,16 @@ public class Viewport extends JComponent {
   public Viewport() {
     initComponents();
     transform.setToIdentity();
+    getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "doSomething");
+    getActionMap().put("doSomething", new AbstractAction() {
+      private static final long serialVersionUID = 425431L;
+      @Override
+      public void actionPerformed(ActionEvent e) {
+        if (world.getSelected() != null) {
+          world.delete(world.getSelected());
+        }
+      }
+    });
   }
 
   @Override
