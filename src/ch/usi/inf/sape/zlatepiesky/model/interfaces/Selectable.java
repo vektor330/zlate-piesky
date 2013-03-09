@@ -6,7 +6,7 @@ public interface Selectable {
 
   void setSelected(boolean selected);
 
-  boolean getSelected();
+  boolean isSelected();
 
   Shape getShape();
 

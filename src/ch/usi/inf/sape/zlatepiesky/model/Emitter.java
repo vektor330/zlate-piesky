@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -85,7 +86,13 @@ public class Emitter extends PositionedItem {
   @Override
   public void render(Graphics2D g) {
     g.setPaint(Color.BLUE);
-    g.fill(getShape());
+    final Shape shape = getShape();
+    g.fill(shape);
+    if (isSelected()) {
+      g.setPaint(new Color(255, 204, 52));
+      g.setStroke(new BasicStroke(3f));
+      g.draw(shape);
+    }
   }
 
   @Override

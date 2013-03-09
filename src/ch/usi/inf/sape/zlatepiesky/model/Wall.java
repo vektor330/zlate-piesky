@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
@@ -38,8 +39,15 @@ public class Wall extends Item {
 
   @Override
   public void render(Graphics2D g) {
-    g.setPaint(Color.ORANGE);
-    g.drawLine((int) Math.round(begin.x), (int) Math.round(begin.y), (int) Math.round(end.x), (int) Math.round(end.y));
+    if (isSelected()) {
+      g.setPaint(new Color(255, 204, 52));
+      g.setStroke(new BasicStroke(3f));
+      g.drawLine((int) Math.round(begin.x), (int) Math.round(begin.y), (int) Math.round(end.x), (int) Math.round(end.y));
+    } else {
+      g.setPaint(Color.ORANGE);
+      g.setStroke(new BasicStroke(1f));
+      g.drawLine((int) Math.round(begin.x), (int) Math.round(begin.y), (int) Math.round(end.x), (int) Math.round(end.y));
+    }
   }
 
   @Override

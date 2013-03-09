@@ -13,7 +13,7 @@ public abstract class Item implements Renderable, Selectable {
   }
 
   @Override
-  public boolean getSelected() {
+  public boolean isSelected() {
     return selected;
   }
 }

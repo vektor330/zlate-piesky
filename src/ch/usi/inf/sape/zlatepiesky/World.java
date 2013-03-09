@@ -6,9 +6,11 @@ import ch.usi.inf.sape.zlatepiesky.model.Wall;
 import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.ForceType;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
 import ch.usi.inf.sape.zlatepiesky.physics.Intersection;
 import ch.usi.inf.sape.zlatepiesky.physics.Mirror;
 import java.awt.Color;
+import java.awt.geom.Point2D;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
@@ -26,6 +28,7 @@ public class World {
    */
   private long simulationStep;
   private double airResistance = 0;
+  private Selectable selected = null;
   private double EPSILON = 0.00001;
 
   public synchronized void simulationStep() {
@@ -137,6 +140,34 @@ public class World {
             wall.getBegin().x, wall.getBegin().y, wall.getEnd().x, wall.getEnd().y);
   }
 
+  public Selectable getUnder(final Point2D current) {
+    for (final Force f : forces) {
+      if (f instanceof Selectable) {
+        final Selectable item = (Selectable) f;
+        if (item.getShape().contains(current)) {
+          return item;
+        }
+      }
+    }
+    for (final Emitter e : emitters) {
+      if (e instanceof Selectable) {
+        final Selectable item = (Selectable) e;
+        if (item.getShape().contains(current)) {
+          return item;
+        }
+      }
+    }
+    for (final Wall w : walls) {
+      if (w instanceof Selectable) {
+        final Selectable item = (Selectable) w;
+        if (item.getShape().contains(current)) {
+          return item;
+        }
+      }
+    }
+    return null;
+  }
+
   public List<Force> getForces() {
     return forces;
   }
@@ -171,5 +202,26 @@ public class World {
 
   public void setAirResistance(double airResistance) {
     this.airResistance = airResistance;
+  }
+
+  public Selectable getSelected() {
+    return selected;
+  }
+
+  public void setSelected(Selectable selected) {
+    final Selectable old = this.selected;
+
+    if (this.selected == selected) {
+      this.selected = null;
+    } else {
+      this.selected = selected;
+      if (this.selected != null) {
+        this.selected.setSelected(true);
+      }
+    }
+
+    if (old != null) {
+      old.setSelected(false);
+    }
   }
 }

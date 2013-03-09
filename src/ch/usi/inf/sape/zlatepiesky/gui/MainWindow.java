@@ -2,7 +2,7 @@ package ch.usi.inf.sape.zlatepiesky.gui;
 
 import ch.usi.inf.sape.zlatepiesky.Setup;
 import ch.usi.inf.sape.zlatepiesky.World;
-import java.awt.EventQueue;
+import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
@@ -13,7 +13,6 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
-import javax.swing.UIManager;
 
 // TODO save/load
 public class MainWindow extends JFrame {
@@ -72,6 +71,9 @@ public class MainWindow extends JFrame {
       public void mousePressed(java.awt.event.MouseEvent evt) {
         mouseDown(evt);
       }
+      public void mouseClicked(java.awt.event.MouseEvent evt) {
+        mouseClick(evt);
+      }
     });
     viewport.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
       public void mouseDragged(java.awt.event.MouseEvent evt) {
@@ -106,8 +108,10 @@ public class MainWindow extends JFrame {
 
   private void mouseDown(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseDown
     try {
-      mouseOrigin = viewport.getTransform().inverseTransform(evt.getPoint(), null);
-      originalTransform = (AffineTransform) viewport.getTransform().clone();
+      if (evt.getButton() == MouseEvent.BUTTON1) {
+        mouseOrigin = viewport.getTransform().inverseTransform(evt.getPoint(), null);
+        originalTransform = (AffineTransform) viewport.getTransform().clone();
+      }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
     }
@@ -115,62 +119,29 @@ public class MainWindow extends JFrame {
 
   private void mouseDrag(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseDrag
     try {
-      final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
-      final double tx = current.getX() - mouseOrigin.getX();
-      final double ty = current.getY() - mouseOrigin.getY();
-      mouseOrigin = current;
-      viewport.getTransform().translate(tx, ty);
-      viewport.repaint();
+      if (evt.getButton() == MouseEvent.BUTTON1) {
+        final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
+        final double tx = current.getX() - mouseOrigin.getX();
+        final double ty = current.getY() - mouseOrigin.getY();
+        mouseOrigin = current;
+        viewport.getTransform().translate(tx, ty);
+        viewport.repaint();
+      }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
     }
   }//GEN-LAST:event_mouseDrag
 
-  private static double boundZoom(final double zoom) {
-    if (zoom > 1000) {
-      return 1000;
-    }
-    if (zoom < 0.01) {
-      return 0.01;
-    }
-    return zoom;
-  }
-
-  private static double boundDimension(final double dimension) {
-    if (dimension > 10000) {
-      return 1000;
-    }
-    if (dimension < -10000) {
-      return -10000;
-    }
-    return dimension;
-  }
-
-  public static void main(String args[]) {
-    /* Set the Nimbus look and feel */
-    //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-     * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html
-     */
+  private void mouseClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseClick
     try {
-      UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
-    } catch (ClassNotFoundException ex) {
-      Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (InstantiationException ex) {
-      Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (IllegalAccessException ex) {
-      Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-      Logger.getLogger(MainWindow.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-    }
-    //</editor-fold>
-
-    EventQueue.invokeLater(new Runnable() {
-      public void run() {
-        new MainWindow().setVisible(true);
+      if (evt.getButton() == MouseEvent.BUTTON1) {
+        final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
+        world.setSelected(world.getUnder(current));
       }
-    });
-  }
+    } catch (NoninvertibleTransformException ex) {
+      LOG.log(Level.SEVERE, null, ex);
+    }
+  }//GEN-LAST:event_mouseClick
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
   // End of variables declaration//GEN-END:variables

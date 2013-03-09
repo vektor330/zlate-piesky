@@ -53,8 +53,13 @@ public class BlackHole extends PositionedItem implements Force {
     g.setPaint(Color.BLACK);
     final Shape shape = getShape();
     g.fill(shape);
-    g.setPaint(new Color(1f, 0f, 0f));
-    g.setStroke(new BasicStroke(0.1f));
+    if (isSelected()) {
+      g.setPaint(new Color(255, 204, 52));
+      g.setStroke(new BasicStroke(3f));
+    } else {
+      g.setPaint(new Color(1f, 0f, 0f));
+      g.setStroke(new BasicStroke(0.1f));
+    }
     g.draw(shape);
   }
 
@@ -63,6 +68,7 @@ public class BlackHole extends PositionedItem implements Force {
     return new Ellipse2D.Double(
             getPosition().x - schwarzschildRadius,
             getPosition().y - schwarzschildRadius,
-            schwarzschildRadius, schwarzschildRadius);
+            schwarzschildRadius * 2,
+            schwarzschildRadius * 2);
   }
 }

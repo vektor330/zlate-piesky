@@ -6,6 +6,7 @@ import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
 import ch.usi.inf.sape.zlatepiesky.model.forces.Gravity;
 import javax.vecmath.Vector2d;
 
+// TODO get rid of this
 public class Setup {
 
   public static void setup(final World world) {
