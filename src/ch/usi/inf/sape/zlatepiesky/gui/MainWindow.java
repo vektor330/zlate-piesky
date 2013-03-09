@@ -1,27 +1,29 @@
 package ch.usi.inf.sape.zlatepiesky.gui;
 
 import ch.usi.inf.sape.zlatepiesky.Setup;
+import ch.usi.inf.sape.zlatepiesky.Utils;
 import ch.usi.inf.sape.zlatepiesky.World;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
 import java.awt.geom.Point2D;
+import java.io.File;
 import java.util.Timer;
 import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JFileChooser;
 import javax.swing.JFrame;
 import javax.vecmath.Vector2d;
 
-// TODO save/load
 public class MainWindow extends JFrame {
 
   private static final long serialVersionUID = 13243235L;
   private static final Logger LOG = Logger.getLogger("Viewport");
   private AffineTransform originalTransform;
   private Point2D mouseOrigin;
-  private final World world = new World();
+  private World world = new World();
   private Selectable dragging;
 
   public MainWindow() {
@@ -52,6 +54,10 @@ public class MainWindow extends JFrame {
     java.awt.GridBagConstraints gridBagConstraints;
 
     viewport = new ch.usi.inf.sape.zlatepiesky.gui.Viewport();
+    jMenuBar1 = new javax.swing.JMenuBar();
+    jMenu1 = new javax.swing.JMenu();
+    jMenuItem1 = new javax.swing.JMenuItem();
+    jMenuItem2 = new javax.swing.JMenuItem();
 
     setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
     setPreferredSize(new java.awt.Dimension(800, 600));
@@ -87,6 +93,30 @@ public class MainWindow extends JFrame {
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
     getContentPane().add(viewport, gridBagConstraints);
+
+    jMenu1.setText("File");
+
+    jMenuItem1.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_S, java.awt.event.InputEvent.META_MASK));
+    jMenuItem1.setText("Save");
+    jMenuItem1.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menuSave(evt);
+      }
+    });
+    jMenu1.add(jMenuItem1);
+
+    jMenuItem2.setAccelerator(javax.swing.KeyStroke.getKeyStroke(java.awt.event.KeyEvent.VK_O, java.awt.event.InputEvent.META_MASK));
+    jMenuItem2.setText("Load");
+    jMenuItem2.addActionListener(new java.awt.event.ActionListener() {
+      public void actionPerformed(java.awt.event.ActionEvent evt) {
+        menuLoad(evt);
+      }
+    });
+    jMenu1.add(jMenuItem2);
+
+    jMenuBar1.add(jMenu1);
+
+    setJMenuBar(jMenuBar1);
 
     pack();
   }// </editor-fold>//GEN-END:initComponents
@@ -152,7 +182,32 @@ public class MainWindow extends JFrame {
   private void mouseUp(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseUp
     dragging = null;
   }//GEN-LAST:event_mouseUp
+
+  private void menuSave(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSave
+    final JFileChooser fc = new JFileChooser();
+    int returnVal = fc.showSaveDialog(this);
+
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = fc.getSelectedFile();
+      Utils.save(file, world);
+    }
+  }//GEN-LAST:event_menuSave
+
+  private void menuLoad(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuLoad
+    final JFileChooser fc = new JFileChooser();
+    int returnVal = fc.showOpenDialog(this);
+
+    if (returnVal == JFileChooser.APPROVE_OPTION) {
+      File file = fc.getSelectedFile();
+      world = Utils.load(file);
+      viewport.setWorld(world);
+    }
+  }//GEN-LAST:event_menuLoad
   // Variables declaration - do not modify//GEN-BEGIN:variables
+  private javax.swing.JMenu jMenu1;
+  private javax.swing.JMenuBar jMenuBar1;
+  private javax.swing.JMenuItem jMenuItem1;
+  private javax.swing.JMenuItem jMenuItem2;
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
   // End of variables declaration//GEN-END:variables
 }

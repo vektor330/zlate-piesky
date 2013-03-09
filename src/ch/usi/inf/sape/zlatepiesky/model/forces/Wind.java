@@ -1,13 +1,15 @@
 package ch.usi.inf.sape.zlatepiesky.model.forces;
 
+import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.ForceType;
-import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
+import java.io.Serializable;
 import javax.vecmath.Vector2d;
 
-public class Wind implements Force, Position {
+public class Wind implements Force, Position, Serializable {
 
+  private static final long serialVersionUID = 245251L;
   private Vector2d position;
   private Vector2d direction;
   private double strength;
@@ -18,6 +20,7 @@ public class Wind implements Force, Position {
     return position;
   }
 
+  @Override
   public void setPosition(Vector2d position) {
     this.position = position;
   }
@@ -48,7 +51,6 @@ public class Wind implements Force, Position {
     ret.scale(strength * particle.getSize() / distanceSq);
     return ret;
   }
-
 
   @Override
   public ForceType getType() {

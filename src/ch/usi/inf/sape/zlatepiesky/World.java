@@ -11,13 +11,16 @@ import ch.usi.inf.sape.zlatepiesky.physics.Intersection;
 import ch.usi.inf.sape.zlatepiesky.physics.Mirror;
 import java.awt.Color;
 import java.awt.geom.Point2D;
+import java.io.Serializable;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4d;
 
-public class World {
+public class World implements Serializable {
+
+  private static final long serialVersionUID = 14245L;
 
   private List<Force> forces = new LinkedList<>();
   private List<Emitter> emitters = new LinkedList<>();

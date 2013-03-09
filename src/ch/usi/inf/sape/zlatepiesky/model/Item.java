@@ -2,9 +2,10 @@ package ch.usi.inf.sape.zlatepiesky.model;
 
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
+import java.io.Serializable;
 import javax.vecmath.Vector2d;
 
-public abstract class Item implements Renderable, Selectable {
+public abstract class Item implements Renderable, Selectable, Serializable {
 
   private Vector2d position;
   private boolean selected;
@@ -14,6 +15,7 @@ public abstract class Item implements Renderable, Selectable {
     return position;
   }
 
+  @Override
   public void setPosition(Vector2d position) {
     this.position = position;
   }

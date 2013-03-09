@@ -5,10 +5,13 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import java.io.Serializable;
 import javax.vecmath.Vector2d;
 
-public class Wall extends Item {
+// TODO make it possible to move ends
+public class Wall extends Item implements Serializable {
 
+  private static final long serialVersionUID = 142525252L;
   private Vector2d begin;
   private Vector2d end;
   private double elasticity;

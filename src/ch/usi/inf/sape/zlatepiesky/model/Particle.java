@@ -5,10 +5,12 @@ import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.io.Serializable;
 import javax.vecmath.Vector2d;
 
-public class Particle implements Position, Renderable {
+public class Particle implements Position, Renderable, Serializable {
 
+  private static final long serialVersionUID = 5425251L;
   private Vector2d position = new Vector2d();
   private Vector2d speed = new Vector2d();
   private double weight = 1;
@@ -26,6 +28,7 @@ public class Particle implements Position, Renderable {
     return position;
   }
 
+  @Override
   public void setPosition(Vector2d position) {
     this.position = new Vector2d(position);
   }
@@ -96,8 +99,14 @@ public class Particle implements Position, Renderable {
     if (color != null) {
       c = color;
     } else {
-      float blue = Math.max(0, Math.min(1, (float) Math.log(speed.lengthSquared())));
-      c = new Color(1 - blue, 0.2f, blue);
+      final float speedLog = (float) Math.log(speed.lengthSquared());
+      if (speedLog < 0) {
+        c = new Color(1 / (-speedLog + 1), 0.2f / (-speedLog + 1), 0);
+      } else if (speedLog > 1) {
+        c = new Color(1 - 1 / (speedLog), 1f - 0.8f / speedLog, 1f);
+      } else {
+        c = new Color(1 - speedLog, 0.2f, speedLog);
+      }
     }
     g.setPaint(c);
     g.setStroke(new BasicStroke((int) Math.round(size)));

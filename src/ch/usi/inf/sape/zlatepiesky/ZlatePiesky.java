@@ -6,6 +6,11 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.UIManager;
 
+// TODO add handles:
+// - edit line ends
+// - edit schwarzschild
+// TODO gravity and wind should be visible
+// TODO add editor windows
 public class ZlatePiesky {
 
   public static void main(String args[]) {

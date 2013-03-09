@@ -9,10 +9,12 @@ import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
+import java.io.Serializable;
 import javax.vecmath.Vector2d;
 
-public class BlackHole extends Item implements Force {
+public class BlackHole extends Item implements Force, Serializable {
 
+  private static final long serialVersionUID = 12345426L;
   private double strength;
   private double schwarzschildRadius = 10;
 

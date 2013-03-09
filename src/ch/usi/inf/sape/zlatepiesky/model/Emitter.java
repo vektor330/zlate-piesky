@@ -9,6 +9,7 @@ import javax.vecmath.Vector2d;
 
 public class Emitter extends Item {
 
+  private static final long serialVersionUID = 1245235L;
   /**
    * Number of particles emitted per second.
    */
