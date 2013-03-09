@@ -5,4 +5,6 @@ import javax.vecmath.Vector2d;
 public interface Position {
 
   Vector2d getPosition();
+
+  void setPosition(Vector2d position);
 }

@@ -18,7 +18,7 @@ public class Wall extends Item {
   }
 
   public void setBegin(Vector2d begin) {
-    this.begin = begin;
+    this.begin = new Vector2d(begin);
   }
 
   public Vector2d getEnd() {
@@ -26,7 +26,7 @@ public class Wall extends Item {
   }
 
   public void setEnd(Vector2d end) {
-    this.end = end;
+    this.end = new Vector2d(end);
   }
 
   public double getElasticity() {
@@ -35,6 +35,20 @@ public class Wall extends Item {
 
   public void setElasticity(double elasticity) {
     this.elasticity = elasticity;
+  }
+
+  @Override
+  public Vector2d getPosition() {
+    return begin;
+  }
+
+  @Override
+  public void setPosition(Vector2d position) {
+    final Vector2d d = new Vector2d(end);
+    d.sub(begin);
+    setBegin(position);
+    position.add(d);
+    setEnd(position);
   }
 
   @Override

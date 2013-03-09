@@ -2,6 +2,7 @@ package ch.usi.inf.sape.zlatepiesky.gui;
 
 import ch.usi.inf.sape.zlatepiesky.Setup;
 import ch.usi.inf.sape.zlatepiesky.World;
+import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.NoninvertibleTransformException;
@@ -11,6 +12,7 @@ import java.util.TimerTask;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFrame;
+import javax.vecmath.Vector2d;
 
 // TODO save/load
 public class MainWindow extends JFrame {
@@ -20,6 +22,7 @@ public class MainWindow extends JFrame {
   private AffineTransform originalTransform;
   private Point2D mouseOrigin;
   private final World world = new World();
+  private Selectable dragging;
 
   public MainWindow() {
     initComponents();
@@ -63,6 +66,9 @@ public class MainWindow extends JFrame {
       public void mousePressed(java.awt.event.MouseEvent evt) {
         mouseDown(evt);
       }
+      public void mouseReleased(java.awt.event.MouseEvent evt) {
+        mouseUp(evt);
+      }
       public void mouseClicked(java.awt.event.MouseEvent evt) {
         mouseClick(evt);
       }
@@ -103,6 +109,10 @@ public class MainWindow extends JFrame {
       if (evt.getButton() == MouseEvent.BUTTON1) {
         mouseOrigin = viewport.getTransform().inverseTransform(evt.getPoint(), null);
         originalTransform = (AffineTransform) viewport.getTransform().clone();
+        final Selectable s = world.getUnder(mouseOrigin);
+        if (s != null) {
+          dragging = s;
+        }
       }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
@@ -113,11 +123,15 @@ public class MainWindow extends JFrame {
     try {
       if (evt.getButton() == MouseEvent.BUTTON1) {
         final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
-        final double tx = current.getX() - mouseOrigin.getX();
-        final double ty = current.getY() - mouseOrigin.getY();
-        mouseOrigin = current;
-        viewport.getTransform().translate(tx, ty);
-        viewport.repaint();
+        if (dragging != null) {
+          dragging.setPosition(new Vector2d(current.getX(), current.getY()));
+        } else {
+          final double tx = current.getX() - mouseOrigin.getX();
+          final double ty = current.getY() - mouseOrigin.getY();
+          mouseOrigin = current;
+          viewport.getTransform().translate(tx, ty);
+          viewport.repaint();
+        }
       }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
@@ -135,6 +149,9 @@ public class MainWindow extends JFrame {
     }
   }//GEN-LAST:event_mouseClick
 
+  private void mouseUp(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseUp
+    dragging = null;
+  }//GEN-LAST:event_mouseUp
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
   // End of variables declaration//GEN-END:variables

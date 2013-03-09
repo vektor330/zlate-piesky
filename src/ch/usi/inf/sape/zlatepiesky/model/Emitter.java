@@ -7,7 +7,7 @@ import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import javax.vecmath.Vector2d;
 
-public class Emitter extends PositionedItem {
+public class Emitter extends Item {
 
   /**
    * Number of particles emitted per second.
