@@ -15,9 +15,9 @@ public class Particle implements Position, Renderable, Serializable {
   private Vector2d speed = new Vector2d();
   private double weight = 1;
   /**
-   * Timestamp when this particle was created.
+   * Timestamp when this particle will die.
    */
-  private long created = 0;
+  private long death = 0;
   private double size = 1;
   private Emitter birthplace = null;
   private Color color = null;
@@ -49,12 +49,12 @@ public class Particle implements Position, Renderable, Serializable {
     this.weight = weight;
   }
 
-  public long getCreated() {
-    return created;
+  public long getDeath() {
+    return death;
   }
 
-  public void setCreated(long created) {
-    this.created = created;
+  public void setDeath(long death) {
+    this.death = death;
   }
 
   public double getSize() {

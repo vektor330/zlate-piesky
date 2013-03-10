@@ -30,18 +30,19 @@ public class World implements Serializable {
    */
   private long simulationStep;
   private double timeSpeed = 1;
+  private long now = 0;
   private double airResistance = 0;
   private Selectable selected = null;
 
   public synchronized void simulationStep() {
     final long stepsPerSecond = 1000 / getSimulationStep();
-    final long now = System.currentTimeMillis();
-    killOldParticles(now);
-    createParticles(stepsPerSecond, now);
-    moveParticles(now);
+    setNow(getNow() + getSimulationStep());
+    killOldParticles();
+    createParticles(stepsPerSecond);
+    moveParticles();
   }
 
-  private void killOldParticles(final long now) {
+  private void killOldParticles() {
     final Iterator<Particle> it = getParticles().iterator();
     while (it.hasNext()) {
       final Particle particle = it.next();
@@ -50,14 +51,14 @@ public class World implements Serializable {
         it.remove();
         continue;
       }
-      if (particle.getCreated() + particle.getBirthplace().getLifetime() < now) {
+      if (particle.getDeath() < getNow()) {
         it.remove();
         continue;
       }
     }
   }
 
-  private void createParticles(final long stepsPerSecond, final long now) {
+  private void createParticles(final long stepsPerSecond) {
     for (final Emitter emitter : getEmitters()) {
       final double create = (emitter.getRate() + (Math.random() - 0.5) * emitter.getRateSpread()) / (double) stepsPerSecond;
       int atLeast = 0;
@@ -70,7 +71,7 @@ public class World implements Serializable {
         final Particle p = new Particle();
         p.setPosition(emitter.getPosition());
         p.setBirthplace(emitter);
-        p.setCreated(now);
+        p.setDeath(getNow() + (long) (emitter.getLifetime() + (Math.random() - 0.5) * emitter.getLifetimeSpread()));
         final Vector2d speed;
         if (emitter.getSpeedSpread() > Constants.EPSILON) {
           speed = new Vector2d(emitter.getInitialSpeed());
@@ -87,7 +88,7 @@ public class World implements Serializable {
     }
   }
 
-  private void moveParticles(final long now) {
+  private void moveParticles() {
     final Iterator<Particle> it2 = particles.iterator();
     final List<Particle> blinks = new LinkedList<>();
     while (it2.hasNext()) {
@@ -107,7 +108,7 @@ public class World implements Serializable {
             blink.setPosition(particle.getPosition());
             blink.setSpeed(new Vector2d());
             blink.setBirthplace(particle.getBirthplace());
-            blink.setCreated(now - particle.getBirthplace().getLifetime() + 20); // TODO I want a property "time left"
+            blink.setDeath(getNow() + 20);
             blink.setColor(Color.WHITE);
             blink.setImmovable(true);
             blink.setSize(3);
@@ -270,5 +271,13 @@ public class World implements Serializable {
 
   public void setTimeSpeed(double timeSpeed) {
     this.timeSpeed = timeSpeed;
+  }
+
+  public long getNow() {
+    return now;
+  }
+
+  public void setNow(long now) {
+    this.now = now;
   }
 }
