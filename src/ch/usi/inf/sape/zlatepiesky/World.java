@@ -21,7 +21,6 @@ import javax.vecmath.Vector4d;
 public class World implements Serializable {
 
   private static final long serialVersionUID = 14245L;
-
   private List<Force> forces = new LinkedList<>();
   private List<Emitter> emitters = new LinkedList<>();
   private List<Particle> particles = new LinkedList<>();
@@ -54,14 +53,14 @@ public class World implements Serializable {
 
   private void createParticles(final long stepsPerSecond, final long now) {
     for (final Emitter emitter : getEmitters()) {
-      final double create = (double) emitter.getRate() / (double) stepsPerSecond;
+      final double create = (emitter.getRate() + (Math.random() - 0.5) * emitter.getRateSpread()) / (double) stepsPerSecond;
       int atLeast = 0;
       if (create < 1) {
         if (Math.random() < create) {
           atLeast = 1;
         }
       }
-      for (long i = 0; i < atLeast + emitter.getRate() / stepsPerSecond; i++) {
+      for (int i = 0; i < atLeast + create; i++) {
         final Particle p = new Particle();
         p.setPosition(emitter.getPosition());
         p.setBirthplace(emitter);
@@ -74,8 +73,9 @@ public class World implements Serializable {
           speed = emitter.getInitialSpeed();
         }
         p.setSpeed(speed);
-        p.setWeight(emitter.getParticleWeight());
-        p.setSize(emitter.getParticleSize());
+        final double scale = Math.random() - 0.5;
+        p.setWeight(Math.max(EPSILON, emitter.getParticleWeight() + scale * emitter.getParticleWeight() * emitter.getParticleScaleSpread()));
+        p.setSize(Math.max(EPSILON, emitter.getParticleSize() + scale * emitter.getParticleSize() * emitter.getParticleScaleSpread()));
         particles.add(p);
       }
     }
@@ -171,6 +171,35 @@ public class World implements Serializable {
     return null;
   }
 
+  public void delete(Selectable selected) {
+    final Iterator<Force> itf = forces.iterator();
+    while (itf.hasNext()) {
+      final Force f = itf.next();
+      if (f == selected) {
+        itf.remove();
+        return;
+      }
+    }
+    final Iterator<Emitter> ite = emitters.iterator();
+    while (ite.hasNext()) {
+      final Emitter e = ite.next();
+      if (e == selected) {
+        ite.remove();
+        return;
+      }
+    }
+    final Iterator<Wall> itw = walls.iterator();
+    while (itw.hasNext()) {
+      final Wall w = itw.next();
+      if (w == selected) {
+        itw.remove();
+        return;
+      }
+    }
+  }
+
+  // --- GET/SET ---------------------------------------------------------------
+
   public List<Force> getForces() {
     return forces;
   }
@@ -225,33 +254,6 @@ public class World implements Serializable {
 
     if (old != null) {
       old.setSelected(false);
-    }
-  }
-
-  public void delete(Selectable selected) {
-    final Iterator<Force> itf = forces.iterator();
-    while (itf.hasNext()) {
-      final Force f = itf.next();
-      if (f == selected) {
-        itf.remove();
-        return;
-      }
-    }
-    final Iterator<Emitter> ite = emitters.iterator();
-    while (ite.hasNext()) {
-      final Emitter e = ite.next();
-      if (e == selected) {
-        ite.remove();
-        return;
-      }
-    }
-    final Iterator<Wall> itw = walls.iterator();
-    while (itw.hasNext()) {
-      final Wall w = itw.next();
-      if (w == selected) {
-        itw.remove();
-        return;
-      }
     }
   }
 }

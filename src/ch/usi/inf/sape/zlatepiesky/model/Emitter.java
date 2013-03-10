@@ -13,27 +13,55 @@ public class Emitter extends Item {
   /**
    * Number of particles emitted per second.
    */
-  private long rate = 1;
+  private double rate = 1;
+  private double rateSpread = 0.5;
   /**
    * How many milliseconds do particles survive.
    */
-  private long lifetime = 100000;
+  private long lifetime = 10000;
+  private long lifetimeSpread = 3000;
   private Vector2d initialSpeed = new Vector2d(1, 1);
-  private double particleWeight = 1;
-  private double particleSize = 1;
-  // TODO add weight, size and lifetime perturbation
   /**
    * Spread in radians.
    */
   private double angleSpread = 0; // TODO implement
   private double speedSpread = 1;
+  private double particleWeight = 1;
+  private double particleScaleSpread = 0.9;
+  private double particleSize = 1;
 
-  public long getRate() {
+  @Override
+  public void render(Graphics2D g) {
+    g.setPaint(Color.BLUE);
+    final Shape shape = getShape();
+    g.fill(shape);
+    if (isSelected()) {
+      g.setPaint(new Color(255, 204, 52));
+      g.setStroke(new BasicStroke(3f));
+      g.draw(shape);
+    }
+  }
+
+  @Override
+  public Shape getShape() {
+    return new Rectangle2D.Double(getPosition().x - 5, getPosition().y - 5, 10, 10);
+  }
+
+  // --- GET/SET ---------------------------------------------------------------
+  public double getRate() {
     return rate;
   }
 
-  public void setRate(long rate) {
+  public void setRate(double rate) {
     this.rate = rate;
+  }
+
+  public double getRateSpread() {
+    return rateSpread;
+  }
+
+  public void setRateSpread(final double rateSpread) {
+    this.rateSpread = rateSpread;
   }
 
   public long getLifetime() {
@@ -84,20 +112,20 @@ public class Emitter extends Item {
     this.speedSpread = speedSpread;
   }
 
-  @Override
-  public void render(Graphics2D g) {
-    g.setPaint(Color.BLUE);
-    final Shape shape = getShape();
-    g.fill(shape);
-    if (isSelected()) {
-      g.setPaint(new Color(255, 204, 52));
-      g.setStroke(new BasicStroke(3f));
-      g.draw(shape);
-    }
+  public long getLifetimeSpread() {
+    return lifetimeSpread;
   }
 
-  @Override
-  public Shape getShape() {
-    return new Rectangle2D.Double(getPosition().x - 5, getPosition().y - 5, 10, 10);
+  public void setLifetimeSpread(long lifetimeSpread) {
+    this.lifetimeSpread = lifetimeSpread;
   }
+
+  public double getParticleScaleSpread() {
+    return particleScaleSpread;
+  }
+
+  public void setParticleScaleSpread(double particleScaleSpread) {
+    this.particleScaleSpread = particleScaleSpread;
+  }
+
 }

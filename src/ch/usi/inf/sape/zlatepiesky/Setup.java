@@ -17,7 +17,10 @@ public class Setup {
     e.setPosition(new Vector2d(10, 10));
     e.setInitialSpeed(new Vector2d(1.5, -1.5));
     e.setRate(100);
+    e.setRateSpread(50);
     e.setParticleSize(3);
+    e.setParticleWeight(1);
+    e.setParticleScaleSpread(2);
     world.getEmitters().add(e);
 
     final BlackHole bh1 = new BlackHole();
