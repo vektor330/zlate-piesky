@@ -54,6 +54,8 @@ public class MainWindow extends JFrame {
     java.awt.GridBagConstraints gridBagConstraints;
 
     viewport = new ch.usi.inf.sape.zlatepiesky.gui.Viewport();
+    jPanel1 = new javax.swing.JPanel();
+    timeSpeed = new javax.swing.JSlider();
     jMenuBar1 = new javax.swing.JMenuBar();
     jMenu1 = new javax.swing.JMenu();
     jMenuItem1 = new javax.swing.JMenuItem();
@@ -86,13 +88,45 @@ public class MainWindow extends JFrame {
     });
     gridBagConstraints = new java.awt.GridBagConstraints();
     gridBagConstraints.gridx = 0;
-    gridBagConstraints.gridy = 0;
-    gridBagConstraints.gridwidth = 4;
+    gridBagConstraints.gridy = 1;
     gridBagConstraints.fill = java.awt.GridBagConstraints.BOTH;
     gridBagConstraints.weightx = 1.0;
     gridBagConstraints.weighty = 1.0;
     gridBagConstraints.insets = new java.awt.Insets(12, 12, 12, 12);
     getContentPane().add(viewport, gridBagConstraints);
+
+    timeSpeed.setMaximum(300);
+    timeSpeed.setMinimum(-300);
+    timeSpeed.setMinorTickSpacing(10);
+    timeSpeed.setValue(100);
+    timeSpeed.addChangeListener(new javax.swing.event.ChangeListener() {
+      public void stateChanged(javax.swing.event.ChangeEvent evt) {
+        timeSpeedStateChanged(evt);
+      }
+    });
+
+    org.jdesktop.layout.GroupLayout jPanel1Layout = new org.jdesktop.layout.GroupLayout(jPanel1);
+    jPanel1.setLayout(jPanel1Layout);
+    jPanel1Layout.setHorizontalGroup(
+      jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+      .add(jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .add(timeSpeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(604, Short.MAX_VALUE))
+    );
+    jPanel1Layout.setVerticalGroup(
+      jPanel1Layout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
+      .add(jPanel1Layout.createSequentialGroup()
+        .addContainerGap()
+        .add(timeSpeed, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE, org.jdesktop.layout.GroupLayout.DEFAULT_SIZE, org.jdesktop.layout.GroupLayout.PREFERRED_SIZE)
+        .addContainerGap(15, Short.MAX_VALUE))
+    );
+
+    gridBagConstraints = new java.awt.GridBagConstraints();
+    gridBagConstraints.fill = java.awt.GridBagConstraints.HORIZONTAL;
+    gridBagConstraints.weightx = 1.0;
+    gridBagConstraints.insets = new java.awt.Insets(2, 2, 2, 2);
+    getContentPane().add(jPanel1, gridBagConstraints);
 
     jMenu1.setText("File");
 
@@ -203,11 +237,18 @@ public class MainWindow extends JFrame {
       viewport.setWorld(world);
     }
   }//GEN-LAST:event_menuLoad
+
+  private void timeSpeedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpeedStateChanged
+    world.setTimeSpeed((double)timeSpeed.getValue() / 100);
+  }//GEN-LAST:event_timeSpeedStateChanged
+
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JMenu jMenu1;
   private javax.swing.JMenuBar jMenuBar1;
   private javax.swing.JMenuItem jMenuItem1;
   private javax.swing.JMenuItem jMenuItem2;
+  private javax.swing.JPanel jPanel1;
+  private javax.swing.JSlider timeSpeed;
   private ch.usi.inf.sape.zlatepiesky.gui.Viewport viewport;
   // End of variables declaration//GEN-END:variables
 }

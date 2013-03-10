@@ -29,9 +29,9 @@ public class World implements Serializable {
    * Simulation step in milliseconds.
    */
   private long simulationStep;
+  private double timeSpeed = 1;
   private double airResistance = 0;
   private Selectable selected = null;
-  private double EPSILON = 0.00001;
 
   public synchronized void simulationStep() {
     final long stepsPerSecond = 1000 / getSimulationStep();
@@ -45,8 +45,14 @@ public class World implements Serializable {
     final Iterator<Particle> it = getParticles().iterator();
     while (it.hasNext()) {
       final Particle particle = it.next();
+      if (Math.abs(particle.getPosition().x) > Constants.SIZE
+              || Math.abs(particle.getPosition().y) > Constants.SIZE) {
+        it.remove();
+        continue;
+      }
       if (particle.getCreated() + particle.getBirthplace().getLifetime() < now) {
         it.remove();
+        continue;
       }
     }
   }
@@ -66,7 +72,7 @@ public class World implements Serializable {
         p.setBirthplace(emitter);
         p.setCreated(now);
         final Vector2d speed;
-        if (emitter.getSpeedSpread() > EPSILON) {
+        if (emitter.getSpeedSpread() > Constants.EPSILON) {
           speed = new Vector2d(emitter.getInitialSpeed());
           speed.scale(speed.length() + (Math.random() - 0.5) * emitter.getSpeedSpread());
         } else {
@@ -74,8 +80,8 @@ public class World implements Serializable {
         }
         p.setSpeed(speed);
         final double scale = Math.random() - 0.5;
-        p.setWeight(Math.max(EPSILON, emitter.getParticleWeight() + scale * emitter.getParticleWeight() * emitter.getParticleScaleSpread()));
-        p.setSize(Math.max(EPSILON, emitter.getParticleSize() + scale * emitter.getParticleSize() * emitter.getParticleScaleSpread()));
+        p.setWeight(Math.max(Constants.EPSILON, emitter.getParticleWeight() + scale * emitter.getParticleWeight() * emitter.getParticleScaleSpread()));
+        p.setSize(Math.max(Constants.EPSILON, emitter.getParticleSize() + scale * emitter.getParticleSize() * emitter.getParticleScaleSpread()));
         particles.add(p);
       }
     }
@@ -118,7 +124,9 @@ public class World implements Serializable {
       particle.getSpeed().scale(1 - speedSq * getAirResistance() * particle.getSize());
 
       final Vector2d newPosition = new Vector2d(particle.getPosition());
-      newPosition.add(particle.getSpeed());
+      final Vector2d speed = particle.getSpeed();
+      speed.scale(timeSpeed);
+      newPosition.add(speed);
       boolean wasCollision = false;
       for (final Wall wall : getWalls()) {
         if (particleCollides(particle.getPosition(), newPosition, wall)) {
@@ -199,7 +207,6 @@ public class World implements Serializable {
   }
 
   // --- GET/SET ---------------------------------------------------------------
-
   public List<Force> getForces() {
     return forces;
   }
@@ -255,5 +262,13 @@ public class World implements Serializable {
     if (old != null) {
       old.setSelected(false);
     }
+  }
+
+  public double getTimeSpeed() {
+    return timeSpeed;
+  }
+
+  public void setTimeSpeed(double timeSpeed) {
+    this.timeSpeed = timeSpeed;
   }
 }
