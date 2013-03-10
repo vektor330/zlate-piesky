@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model.forces;
 
+import ch.usi.inf.sape.zlatepiesky.World;
 import ch.usi.inf.sape.zlatepiesky.model.Item;
 import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
@@ -72,5 +73,10 @@ public class BlackHole extends Item implements Force, Serializable {
             getPosition().y - schwarzschildRadius,
             schwarzschildRadius * 2,
             schwarzschildRadius * 2);
+  }
+
+  @Override
+  public void showProperties(final World world) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

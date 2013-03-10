@@ -1,10 +1,13 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import ch.usi.inf.sape.zlatepiesky.World;
+import ch.usi.inf.sape.zlatepiesky.gui.properties.EmitterProperties;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
+import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
 public class Emitter extends Item {
@@ -128,4 +131,14 @@ public class Emitter extends Item {
     this.particleScaleSpread = particleScaleSpread;
   }
 
+  @Override
+  public void showProperties(final World world) {
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        new EmitterProperties(Emitter.this, world).setVisible(true);
+      }
+    });
+
+  }
 }

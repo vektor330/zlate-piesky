@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import ch.usi.inf.sape.zlatepiesky.World;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
@@ -74,5 +75,10 @@ public class Wall extends Item implements Serializable {
     final double w = Math.abs(begin.x - end.x);
     final double h = Math.abs(begin.y - end.y);
     return new Rectangle2D.Double(x, y, w, h);
+  }
+
+  @Override
+  public void showProperties(final World world) {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
   }
 }

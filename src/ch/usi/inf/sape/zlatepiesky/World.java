@@ -18,6 +18,7 @@ import java.util.List;
 import javax.vecmath.Vector2d;
 import javax.vecmath.Vector4d;
 
+// TODO reimplement physics from scrach
 public class World implements Serializable {
 
   private static final long serialVersionUID = 14245L;

@@ -15,13 +15,14 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
+import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
 public class MainWindow extends JFrame {
 
   private static final long serialVersionUID = 13243235L;
   private static final Logger LOG = Logger.getLogger("Viewport");
-  private AffineTransform originalTransform;
+  private AffineTransform originalTransform = new AffineTransform();
   private Point2D mouseOrigin;
   private World world = new World();
   private Selectable dragging;
@@ -40,7 +41,7 @@ public class MainWindow extends JFrame {
       public void run() {
         world.simulationStep();
         counter++;
-        if (counter == 2) {
+        if (counter == 4) {
           viewport.repaint();
           counter = 0;
         }
@@ -185,7 +186,7 @@ public class MainWindow extends JFrame {
 
   private void mouseDrag(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseDrag
     try {
-      if (evt.getButton() == MouseEvent.BUTTON1) {
+      if (SwingUtilities.isLeftMouseButton(evt)) {
         final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
         if (dragging != null) {
           dragging.setPosition(new Vector2d(current.getX(), current.getY()));
@@ -204,9 +205,12 @@ public class MainWindow extends JFrame {
 
   private void mouseClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseClick
     try {
-      if (evt.getButton() == MouseEvent.BUTTON1) {
-        final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
-        world.setSelected(world.getUnder(current));
+      final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
+      final Selectable item = world.getUnder(current);
+      if (SwingUtilities.isLeftMouseButton(evt)) {
+        world.setSelected(item);
+      } else if (SwingUtilities.isRightMouseButton(evt) && item != null) {
+        item.showProperties(world);
       }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
