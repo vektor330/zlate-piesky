@@ -136,9 +136,9 @@ public class Emitter extends Item {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
+        // TODO singleton?
         new EmitterProperties(Emitter.this, world).setVisible(true);
       }
     });
-
   }
 }

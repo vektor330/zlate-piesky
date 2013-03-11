@@ -1,6 +1,7 @@
 package ch.usi.inf.sape.zlatepiesky.model.forces;
 
 import ch.usi.inf.sape.zlatepiesky.World;
+import ch.usi.inf.sape.zlatepiesky.gui.properties.BlackHoleProperties;
 import ch.usi.inf.sape.zlatepiesky.model.Item;
 import ch.usi.inf.sape.zlatepiesky.model.Particle;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Force;
@@ -11,6 +12,7 @@ import java.awt.Graphics2D;
 import java.awt.Shape;
 import java.awt.geom.Ellipse2D;
 import java.io.Serializable;
+import javax.swing.SwingUtilities;
 import javax.vecmath.Vector2d;
 
 public class BlackHole extends Item implements Force, Serializable {
@@ -77,6 +79,12 @@ public class BlackHole extends Item implements Force, Serializable {
 
   @Override
   public void showProperties(final World world) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    SwingUtilities.invokeLater(new Runnable() {
+      @Override
+      public void run() {
+        // TODO singleton?
+        new BlackHoleProperties(BlackHole.this, world).setVisible(true);
+      }
+    });
   }
 }

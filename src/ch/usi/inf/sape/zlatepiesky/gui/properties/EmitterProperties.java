@@ -18,7 +18,7 @@ public class EmitterProperties extends JFrame {
     this.emitter = emitter;
     this.world = world;
     initComponents();
-    rate.setValue((int)Math.round(emitter.getRate()));
+    rate.setValue((int) Math.round(emitter.getRate()));
     // TODO show up next to the emitter
   }
 
@@ -65,7 +65,7 @@ public class EmitterProperties extends JFrame {
   }// </editor-fold>//GEN-END:initComponents
 
   private void rateChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_rateChange
-    emitter.setRate(rate.getValue());
+      emitter.setRate(rate.getValue());
   }//GEN-LAST:event_rateChange
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
