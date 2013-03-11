@@ -19,7 +19,6 @@ public class Particle implements Position, Renderable, Serializable {
    */
   private long death = 0;
   private double size = 1;
-  private Emitter birthplace = null;
   private Color color = null;
   private boolean immovable = false;
 
@@ -63,14 +62,6 @@ public class Particle implements Position, Renderable, Serializable {
 
   public void setSize(double size) {
     this.size = size;
-  }
-
-  public Emitter getBirthplace() {
-    return birthplace;
-  }
-
-  public void setBirthplace(Emitter birthplace) {
-    this.birthplace = birthplace;
   }
 
   public Color getColor() {

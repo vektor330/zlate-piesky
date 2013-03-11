@@ -71,7 +71,6 @@ public class World implements Serializable {
       for (int i = 0; i < atLeast + create; i++) {
         final Particle p = new Particle();
         p.setPosition(emitter.getPosition());
-        p.setBirthplace(emitter);
         p.setDeath(getNow() + (long) (emitter.getLifetime() + (Math.random() - 0.5) * emitter.getLifetimeSpread()));
         final Vector2d speed;
         if (emitter.getSpeedSpread() > Constants.EPSILON) {
