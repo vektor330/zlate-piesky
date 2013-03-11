@@ -2,7 +2,6 @@ package ch.usi.inf.sape.zlatepiesky.gui;
 
 import ch.usi.inf.sape.zlatepiesky.Setup;
 import ch.usi.inf.sape.zlatepiesky.Utils;
-import ch.usi.inf.sape.zlatepiesky.World;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
 import java.awt.event.MouseEvent;
 import java.awt.geom.AffineTransform;
@@ -24,14 +23,12 @@ public class MainWindow extends JFrame {
   private static final Logger LOG = Logger.getLogger("Viewport");
   private AffineTransform originalTransform = new AffineTransform();
   private Point2D mouseOrigin;
-  private World world = new World();
   private Selectable dragging;
 
   public MainWindow() {
     initComponents();
     setLocationRelativeTo(null);
-    Setup.setup(world);
-    viewport.setWorld(world);
+    Setup.setup(viewport.getWorld());
 
     final Timer simulationTimer = new Timer();
     simulationTimer.scheduleAtFixedRate(new TimerTask() {
@@ -39,7 +36,7 @@ public class MainWindow extends JFrame {
 
       @Override
       public void run() {
-        world.simulationStep();
+        viewport.getWorld().simulationStep();
         counter++;
         if (counter == 4) {
           viewport.repaint();
@@ -174,7 +171,7 @@ public class MainWindow extends JFrame {
       if (evt.getButton() == MouseEvent.BUTTON1) {
         mouseOrigin = viewport.getTransform().inverseTransform(evt.getPoint(), null);
         originalTransform = (AffineTransform) viewport.getTransform().clone();
-        final Selectable s = world.getUnder(mouseOrigin);
+        final Selectable s = viewport.getWorld().getUnder(mouseOrigin);
         if (s != null) {
           dragging = s;
         }
@@ -206,11 +203,11 @@ public class MainWindow extends JFrame {
   private void mouseClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseClick
     try {
       final Point2D current = viewport.getTransform().inverseTransform(evt.getPoint(), null);
-      final Selectable item = world.getUnder(current);
+      final Selectable item = viewport.getWorld().getUnder(current);
       if (SwingUtilities.isLeftMouseButton(evt)) {
-        world.setSelected(item);
+        viewport.getWorld().setSelected(item);
       } else if (SwingUtilities.isRightMouseButton(evt) && item != null) {
-        item.showProperties(world);
+        item.showProperties(viewport.getWorld());
       }
     } catch (NoninvertibleTransformException ex) {
       LOG.log(Level.SEVERE, null, ex);
@@ -227,7 +224,7 @@ public class MainWindow extends JFrame {
 
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = fc.getSelectedFile();
-      Utils.save(file, world);
+      Utils.save(file, viewport.getWorld());
     }
   }//GEN-LAST:event_menuSave
 
@@ -237,13 +234,12 @@ public class MainWindow extends JFrame {
 
     if (returnVal == JFileChooser.APPROVE_OPTION) {
       File file = fc.getSelectedFile();
-      world = Utils.load(file);
-      viewport.setWorld(world);
+      viewport.setWorld(Utils.load(file));
     }
   }//GEN-LAST:event_menuLoad
 
   private void timeSpeedStateChanged(javax.swing.event.ChangeEvent evt) {//GEN-FIRST:event_timeSpeedStateChanged
-    world.setTimeSpeed((double)timeSpeed.getValue() / 100);
+    viewport.getWorld().setTimeSpeed((double)timeSpeed.getValue() / 100);
   }//GEN-LAST:event_timeSpeedStateChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables

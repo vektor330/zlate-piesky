@@ -17,7 +17,7 @@ public class Viewport extends JComponent {
 
   private static final long serialVersionUID = 1345623525L;
   private AffineTransform transform = new AffineTransform();
-  private World world;
+  private volatile World world = new World();
 
   public Viewport() {
     initComponents();
