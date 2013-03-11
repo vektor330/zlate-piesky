@@ -205,7 +205,7 @@ public class MainWindow extends JFrame {
 
   private void mouseClick(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_mouseClick
     try {
-      final Point2D current = originalTransform.inverseTransform(evt.getPoint(), null);
+      final Point2D current = viewport.getTransform().inverseTransform(evt.getPoint(), null);
       final Selectable item = world.getUnder(current);
       if (SwingUtilities.isLeftMouseButton(evt)) {
         world.setSelected(item);
