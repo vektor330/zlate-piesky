@@ -96,7 +96,8 @@ public class World implements Serializable {
       if (particle.isImmovable()) {
         continue;
       }
-      final Vector2d sum = new Vector2d();
+      // sum up all the forces acting on the particle
+      final Vector2d forceSum = new Vector2d();
       for (final Force force : forces) {
         if (force.getType() == ForceType.BLACK_HOLE) {
           final BlackHole blackHole = (BlackHole) force;
@@ -104,30 +105,32 @@ public class World implements Serializable {
           distance.sub(particle.getPosition());
           if (distance.length() < blackHole.getSchwarzschildRadius()) {
             it2.remove();
-            final Particle blink = new Particle();
-            blink.setPosition(particle.getPosition());
-            blink.setSpeed(new Vector2d());
-            blink.setBirthplace(particle.getBirthplace());
-            blink.setDeath(getNow() + 20);
-            blink.setColor(Color.WHITE);
-            blink.setImmovable(true);
-            blink.setSize(3);
-            blinks.add(blink);
+            blinks.add(createBlink(particle));
             break;
           }
         }
         final Vector2d effect = force.getEffect(particle);
-        sum.add(effect);
+        forceSum.add(effect);
       }
-      particle.getSpeed().add(sum);
       // air resistance
-      final double speedSq = particle.getSpeed().lengthSquared();
-      particle.getSpeed().scale(1 - speedSq * getAirResistance() * particle.getSize());
+      final double drag = particle.getSpeed().lengthSquared() * getAirResistance() * particle.getSize() * particle.getSize();
+      final Vector2d dragForce = new Vector2d(particle.getSpeed());
+      dragForce.negate();
+      dragForce.normalize();
+      dragForce.scale(drag);
+      forceSum.add(dragForce);
+
+      // a = F/m
+      forceSum.scale(1 / (particle.getWeight() * timeSpeed));
+
+      // v += a
+      particle.getSpeed().add(forceSum);
 
       final Vector2d newPosition = new Vector2d(particle.getPosition());
       final Vector2d speed = particle.getSpeed();
       speed.scale(timeSpeed);
       newPosition.add(speed);
+
       boolean wasCollision = false;
       for (final Wall wall : getWalls()) {
         if (particleCollides(particle.getPosition(), newPosition, wall)) {
@@ -279,5 +282,16 @@ public class World implements Serializable {
 
   public void setNow(long now) {
     this.now = now;
+  }
+
+  private Particle createBlink(final Particle particle) {
+    final Particle ret = new Particle();
+    ret.setPosition(particle.getPosition());
+    ret.setSpeed(new Vector2d());
+    ret.setDeath(getNow() + 20);
+    ret.setColor(Color.WHITE);
+    ret.setImmovable(true);
+    ret.setSize(3);
+    return ret;
   }
 }
