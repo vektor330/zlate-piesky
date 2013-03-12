@@ -7,8 +7,8 @@ import javax.vecmath.Vector2d;
 
 public abstract class Item implements Renderable, Selectable, Serializable {
 
-  private Vector2d position;
-  private boolean selected;
+  private Vector2d position = new Vector2d(0, 0);
+  private boolean selected = false;
 
   @Override
   public Vector2d getPosition() {

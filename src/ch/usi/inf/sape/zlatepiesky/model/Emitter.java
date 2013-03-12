@@ -51,11 +51,11 @@ public class Emitter extends Item {
   }
 
   // --- GET/SET ---------------------------------------------------------------
-  public double getRate() {
+  public synchronized double getRate() {
     return rate;
   }
 
-  public void setRate(double rate) {
+  public synchronized void setRate(double rate) {
     this.rate = rate;
   }
 

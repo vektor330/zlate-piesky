@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
+import ch.usi.inf.sape.zlatepiesky.Constants;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Position;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Renderable;
 import java.awt.BasicStroke;
@@ -86,6 +87,13 @@ public class Particle implements Position, Renderable, Serializable {
     final int y = (int) Math.round(position.y);
     final int x2 = (int) Math.round(position.x + speed.x);
     final int y2 = (int) Math.round(position.y + speed.y);
+    if (Constants.DUMB) {
+      g.setPaint(Color.WHITE);
+      g.setStroke(new BasicStroke(3));
+      g.drawLine(x, y, x, y);
+      return;
+    }
+
     final Color c;
     if (color != null) {
       c = color;

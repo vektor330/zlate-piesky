@@ -13,9 +13,9 @@ import javax.vecmath.Vector2d;
 public class Wall extends Item implements Serializable {
 
   private static final long serialVersionUID = 142525252L;
-  private Vector2d begin;
-  private Vector2d end;
-  private double elasticity;
+  private Vector2d begin = new Vector2d(0, 0);
+  private Vector2d end = new Vector2d(100, 100);
+  private double elasticity = 1;
 
   public Vector2d getBegin() {
     return begin;

@@ -56,7 +56,7 @@
         <Property name="maximum" type="int" value="500"/>
       </Properties>
       <Events>
-        <EventHandler event="propertyChange" listener="java.beans.PropertyChangeListener" parameters="java.beans.PropertyChangeEvent" handler="rateChange"/>
+        <EventHandler event="mouseDragged" listener="java.awt.event.MouseMotionListener" parameters="java.awt.event.MouseEvent" handler="rateChanged"/>
       </Events>
     </Component>
   </SubComponents>

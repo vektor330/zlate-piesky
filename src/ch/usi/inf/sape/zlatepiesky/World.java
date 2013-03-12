@@ -34,6 +34,7 @@ public class World implements Serializable {
   private long now = 0;
   private double airResistance = 0;
   private Selectable selected = null;
+  private Selectable inFlight = null;
 
   public synchronized void simulationStep() {
     final long stepsPerSecond = 1000 / getSimulationStep();
@@ -105,20 +106,24 @@ public class World implements Serializable {
           distance.sub(particle.getPosition());
           if (distance.length() < blackHole.getSchwarzschildRadius()) {
             it2.remove();
-            blinks.add(createBlink(particle));
+            if (!Constants.DUMB) {
+              blinks.add(createBlink(particle));
+            }
             break;
           }
         }
         final Vector2d effect = force.getEffect(particle);
         forceSum.add(effect);
       }
-      // air resistance
-      final double drag = particle.getSpeed().lengthSquared() * getAirResistance() * particle.getSize() * particle.getSize();
-      final Vector2d dragForce = new Vector2d(particle.getSpeed());
-      dragForce.negate();
-      dragForce.normalize();
-      dragForce.scale(drag);
-      forceSum.add(dragForce);
+      if (!Constants.DUMB) {
+        // air resistance
+        final double drag = particle.getSpeed().lengthSquared() * getAirResistance() * particle.getSize() * particle.getSize();
+        final Vector2d dragForce = new Vector2d(particle.getSpeed());
+        dragForce.negate();
+        dragForce.normalize();
+        dragForce.scale(drag);
+        forceSum.add(dragForce);
+      }
 
       // a = F/m
       forceSum.scale(1 / (particle.getWeight() * timeSpeed));
@@ -132,15 +137,18 @@ public class World implements Serializable {
       newPosition.add(speed);
 
       boolean wasCollision = false;
-      for (final Wall wall : getWalls()) {
-        if (particleCollides(particle.getPosition(), newPosition, wall)) {
-          final Vector4d mirrored = Mirror.mirror(wall.getBegin(), wall.getEnd(), particle.getPosition(), newPosition);
-          Vector2d newPosM = new Vector2d(mirrored.z, mirrored.w);
-          particle.setPosition(newPosM);
-          newPosM.sub(new Vector2d(mirrored.x, mirrored.y));
-          particle.setSpeed(newPosM);
-          wasCollision = true;
-          break;
+      if (!Constants.DUMB) {
+
+        for (final Wall wall : getWalls()) {
+          if (particleCollides(particle.getPosition(), newPosition, wall)) {
+            final Vector4d mirrored = Mirror.mirror(wall.getBegin(), wall.getEnd(), particle.getPosition(), newPosition);
+            Vector2d newPosM = new Vector2d(mirrored.z, mirrored.w);
+            particle.setPosition(newPosM);
+            newPosM.sub(new Vector2d(mirrored.x, mirrored.y));
+            particle.setSpeed(newPosM);
+            wasCollision = true;
+            break;
+          }
         }
       }
       if (!wasCollision) {
@@ -266,6 +274,14 @@ public class World implements Serializable {
     if (old != null) {
       old.setSelected(false);
     }
+  }
+
+  public Selectable getInFlight() {
+    return inFlight;
+  }
+
+  public void setInFlight(Selectable inFlight) {
+    this.inFlight = inFlight;
   }
 
   public double getTimeSpeed() {

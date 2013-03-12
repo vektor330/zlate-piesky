@@ -34,9 +34,9 @@ public class EmitterProperties extends JFrame {
     jLabel1.setText("TODO: create a slider that will work with double values");
 
     rate.setMaximum(500);
-    rate.addPropertyChangeListener(new java.beans.PropertyChangeListener() {
-      public void propertyChange(java.beans.PropertyChangeEvent evt) {
-        rateChange(evt);
+    rate.addMouseMotionListener(new java.awt.event.MouseMotionAdapter() {
+      public void mouseDragged(java.awt.event.MouseEvent evt) {
+        rateChanged(evt);
       }
     });
 
@@ -64,9 +64,11 @@ public class EmitterProperties extends JFrame {
     pack();
   }// </editor-fold>//GEN-END:initComponents
 
-  private void rateChange(java.beans.PropertyChangeEvent evt) {//GEN-FIRST:event_rateChange
+  private void rateChanged(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_rateChanged
+    synchronized (world) {
       emitter.setRate(rate.getValue());
-  }//GEN-LAST:event_rateChange
+    }
+  }//GEN-LAST:event_rateChanged
 
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JLabel jLabel1;
