@@ -100,16 +100,16 @@ public class World implements Serializable {
       // sum up all the forces acting on the particle
       final Vector2d forceSum = new Vector2d();
       for (final Force force : forces) {
-        if (force.getType() == ForceType.BLACK_HOLE) {
-          final BlackHole blackHole = (BlackHole) force;
-          final Vector2d distance = new Vector2d(blackHole.getPosition());
-          distance.sub(particle.getPosition());
-          if (distance.length() < blackHole.getSchwarzschildRadius()) {
-            it2.remove();
-            if (!Constants.DUMB) {
+        if (!Constants.DUMB) {
+          if (force.getType() == ForceType.BLACK_HOLE) {
+            final BlackHole blackHole = (BlackHole) force;
+            final Vector2d distance = new Vector2d(blackHole.getPosition());
+            distance.sub(particle.getPosition());
+            if (distance.length() < blackHole.getSchwarzschildRadius()) {
+              it2.remove();
               blinks.add(createBlink(particle));
+              break;
             }
-            break;
           }
         }
         final Vector2d effect = force.getEffect(particle);

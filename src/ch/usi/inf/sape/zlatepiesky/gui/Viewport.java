@@ -1,5 +1,6 @@
 package ch.usi.inf.sape.zlatepiesky.gui;
 
+import ch.usi.inf.sape.zlatepiesky.Constants;
 import ch.usi.inf.sape.zlatepiesky.World;
 import java.awt.Color;
 import java.awt.Graphics;
@@ -25,6 +26,7 @@ public class Viewport extends JComponent {
     getInputMap().put(KeyStroke.getKeyStroke(KeyEvent.VK_BACK_SPACE, 0), "doSomething");
     getActionMap().put("doSomething", new AbstractAction() {
       private static final long serialVersionUID = 425431L;
+
       @Override
       public void actionPerformed(ActionEvent e) {
         if (world.getSelected() != null) {
@@ -37,9 +39,13 @@ public class Viewport extends JComponent {
   @Override
   public void paint(final Graphics gr) {
     final Graphics2D g = (Graphics2D) gr;
-    g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
-    g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
-    g.setPaint(Color.BLACK);
+    if (Constants.DUMB) {
+      g.setPaint(Color.WHITE);
+    } else {
+      g.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+      g.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+      g.setPaint(Color.BLACK);
+    }
     g.fillRect(0, 0, getWidth(), getHeight());
     final AffineTransform at = g.getTransform();
     g.transform(transform);

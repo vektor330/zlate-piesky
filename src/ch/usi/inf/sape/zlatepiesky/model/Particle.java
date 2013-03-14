@@ -88,7 +88,7 @@ public class Particle implements Position, Renderable, Serializable {
     final int x2 = (int) Math.round(position.x + speed.x);
     final int y2 = (int) Math.round(position.y + speed.y);
     if (Constants.DUMB) {
-      g.setPaint(Color.WHITE);
+      g.setPaint(Color.BLACK);
       g.setStroke(new BasicStroke(3));
       g.drawLine(x, y, x, y);
       return;

@@ -1,10 +1,10 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
-import ch.usi.inf.sape.zlatepiesky.World;
 import ch.usi.inf.sape.zlatepiesky.gui.properties.EmitterProperties;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import javax.swing.SwingUtilities;
@@ -21,8 +21,8 @@ public class Emitter extends Item {
   /**
    * How many milliseconds do particles survive.
    */
-  private long lifetime = 10000;
-  private long lifetimeSpread = 3000;
+  private int lifetime = 10000;
+  private int lifetimeSpread = 3000;
   private Vector2d initialSpeed = new Vector2d(1, 1);
   /**
    * Spread in radians.
@@ -67,11 +67,11 @@ public class Emitter extends Item {
     this.rateSpread = rateSpread;
   }
 
-  public long getLifetime() {
+  public int getLifetime() {
     return lifetime;
   }
 
-  public void setLifetime(long lifetime) {
+  public void setLifetime(int lifetime) {
     this.lifetime = lifetime;
   }
 
@@ -115,11 +115,11 @@ public class Emitter extends Item {
     this.speedSpread = speedSpread;
   }
 
-  public long getLifetimeSpread() {
+  public int getLifetimeSpread() {
     return lifetimeSpread;
   }
 
-  public void setLifetimeSpread(long lifetimeSpread) {
+  public void setLifetimeSpread(int lifetimeSpread) {
     this.lifetimeSpread = lifetimeSpread;
   }
 
@@ -132,12 +132,12 @@ public class Emitter extends Item {
   }
 
   @Override
-  public void showProperties(final World world) {
+  public void showProperties(final Point screenPosition) {
     SwingUtilities.invokeLater(new Runnable() {
       @Override
       public void run() {
         // TODO singleton?
-        new EmitterProperties(Emitter.this, world).setVisible(true);
+        new EmitterProperties(Emitter.this, screenPosition).setVisible(true);
       }
     });
   }

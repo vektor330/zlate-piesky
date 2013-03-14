@@ -8,7 +8,6 @@ import ch.usi.inf.sape.zlatepiesky.model.Emitter;
 import ch.usi.inf.sape.zlatepiesky.model.Wall;
 import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
 import ch.usi.inf.sape.zlatepiesky.model.interfaces.Selectable;
-import java.awt.Component;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.awt.event.MouseEvent;
@@ -20,7 +19,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JFrame;
-import javax.swing.JToggleButton;
 import javax.swing.SwingUtilities;
 import javax.swing.Timer;
 import javax.vecmath.Vector2d;
@@ -57,14 +55,6 @@ public class MainWindow extends JFrame {
     });
     timer.setInitialDelay(0);
     timer.start();
-  }
-
-  private void unclickPalette() {
-    for (final Component c : palette.getComponents()) {
-      if (c instanceof JToggleButton) {
-        ((JToggleButton)c).setSelected(false);
-      }
-    }
   }
 
   @SuppressWarnings("unchecked")
@@ -180,7 +170,7 @@ public class MainWindow extends JFrame {
     paletteFill.setLayout(paletteFillLayout);
     paletteFillLayout.setHorizontalGroup(
       paletteFillLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
-      .add(0, 90, Short.MAX_VALUE)
+      .add(0, 85, Short.MAX_VALUE)
     );
     paletteFillLayout.setVerticalGroup(
       paletteFillLayout.createParallelGroup(org.jdesktop.layout.GroupLayout.LEADING)
@@ -312,13 +302,13 @@ public class MainWindow extends JFrame {
       final Point2D current = viewport.getTransform().inverseTransform(evt.getPoint(), null);
       if (world.getInFlight() != null) {
         world.setInFlight(null);
-        unclickPalette();
+        buttonGroup1.clearSelection();
       } else {
         final Selectable item = world.getUnder(current);
         if (SwingUtilities.isLeftMouseButton(evt)) {
           world.setSelected(item);
         } else if (SwingUtilities.isRightMouseButton(evt) && item != null) {
-          item.showProperties(world);
+          item.showProperties(evt.getLocationOnScreen());
         }
       }
     } catch (NoninvertibleTransformException ex) {
@@ -384,7 +374,6 @@ public class MainWindow extends JFrame {
     viewport.getWorld().getWalls().add(w);
     viewport.getWorld().setInFlight(w);
   }//GEN-LAST:event_wallAdd
-
   // Variables declaration - do not modify//GEN-BEGIN:variables
   private javax.swing.JPanel actionBar;
   private javax.swing.JToggleButton blackHoleAdd;

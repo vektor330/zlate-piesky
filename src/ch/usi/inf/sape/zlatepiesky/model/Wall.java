@@ -1,9 +1,9 @@
 package ch.usi.inf.sape.zlatepiesky.model;
 
-import ch.usi.inf.sape.zlatepiesky.World;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Graphics2D;
+import java.awt.Point;
 import java.awt.Shape;
 import java.awt.geom.Rectangle2D;
 import java.io.Serializable;
@@ -78,7 +78,7 @@ public class Wall extends Item implements Serializable {
   }
 
   @Override
-  public void showProperties(final World world) {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  public void showProperties(final Point screenPosition) {
+    throw new UnsupportedOperationException("Not supported yet.");
   }
 }

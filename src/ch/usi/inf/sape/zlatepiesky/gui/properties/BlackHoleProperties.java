@@ -1,22 +1,21 @@
 package ch.usi.inf.sape.zlatepiesky.gui.properties;
 
-import ch.usi.inf.sape.zlatepiesky.World;
 import ch.usi.inf.sape.zlatepiesky.model.forces.BlackHole;
+import java.awt.Point;
 
 public class BlackHoleProperties extends javax.swing.JFrame {
 
   private static final long serialVersionUID = 13425325L;
   private final BlackHole blackhole;
-  private final World world;
 
   public BlackHoleProperties() {
     this(null, null);
   }
 
-  public BlackHoleProperties(final BlackHole blackhole, final World world) {
+  public BlackHoleProperties(final BlackHole blackhole, final Point screenPosition) {
     this.blackhole = blackhole;
-    this.world = world;
     initComponents();
+    setLocation(screenPosition);
   }
 
   @SuppressWarnings("unchecked")

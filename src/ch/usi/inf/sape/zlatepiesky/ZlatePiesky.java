@@ -11,6 +11,7 @@ import javax.swing.UIManager;
 // - edit schwarzschild
 // TODO gravity and wind should be visible
 // TODO add editor windows
+// TODO how do I get the right slider event?
 public class ZlatePiesky {
 
   public static void main(String args[]) {
